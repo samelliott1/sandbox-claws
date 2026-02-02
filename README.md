@@ -62,19 +62,24 @@ Sandbox Claws adds enforceable egress controls, air-gapped execution, and automa
 ## Quick Start
 
 ```bash
-# Deploy with default (filtered) profile
+# Deploy with default (basic) profile
 ./deploy.sh
 
 # Deploy with specific profile
-./deploy.sh --profile air-gapped
+./deploy.sh filtered
+./deploy.sh airgapped
 
 # Access dashboard
 open http://localhost:8080
+
+# Uninstall everything (with optional Docker removal)
+./uninstall.sh
 ```
 
 ## What's Included
 
 - One-command deployment (auto-installs Docker if needed)
+- **One-command uninstall** with optional Docker removal
 - Three security profiles with enforced network policies
 - Web dashboard for session tracking and findings
 - DLP scanner for detecting sensitive data patterns
@@ -86,7 +91,8 @@ open http://localhost:8080
 
 ```
 sandbox-claws/
-├── deploy.sh                 # Orchestration script
+├── deploy.sh                 # One-command deployment
+├── uninstall.sh              # One-command uninstall
 ├── docker-compose.yml        # Infrastructure definition
 ├── index.html                # Web dashboard
 ├── security/                 # Egress filter configs
