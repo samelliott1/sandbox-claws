@@ -61,18 +61,39 @@ Sandbox Claws adds enforceable egress controls, air-gapped execution, and automa
 
 ## Quick Start
 
+### Prerequisites
+- **Docker** (script will install if needed)
+- **Anthropic API Key** (required for OpenClaw AI)
+  - Get one at: https://console.anthropic.com/settings/keys
+  - Cost: ~$5-20 to start (pay-as-you-go)
+
+### Installation (3 steps, 5 minutes)
+
 ```bash
-# Deploy with default (basic) profile
+# 1. Deploy
 ./deploy.sh
 
-# Deploy with specific profile
-./deploy.sh filtered
-./deploy.sh airgapped
+# 2. Add your Anthropic API key
+nano .env.openclaw
+# Add: ANTHROPIC_API_KEY=sk-ant-your-key-here
+
+# 3. Restart OpenClaw
+docker-compose restart openclaw
 
 # Access dashboard
 open http://localhost:8080
+```
 
-# Uninstall everything (with optional Docker removal)
+**📖 Detailed Guide:** See [QUICKSTART_SIMPLE.md](QUICKSTART_SIMPLE.md) for step-by-step instructions
+
+### Other Commands
+
+```bash
+# Deploy with specific security profile
+./deploy.sh filtered    # Allowlist-only egress
+./deploy.sh airgapped   # No internet access
+
+# Uninstall everything
 ./uninstall.sh
 ```
 
