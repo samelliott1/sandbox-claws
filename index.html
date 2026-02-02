@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sandbox Claws - AI Agent Testing Framework</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <i class="fas fa-shield-halved"></i>
+                <span>Sandbox Claws</span>
+            </div>
+            <div class="nav-links">
+                <a href="#security" class="nav-link"><i class="fas fa-lock"></i> Security</a>
+                <a href="#setup" class="nav-link"><i class="fas fa-cog"></i> Setup</a>
+                <a href="#testing" class="nav-link"><i class="fas fa-flask"></i> Testing</a>
+                <a href="#findings" class="nav-link"><i class="fas fa-chart-line"></i> Findings</a>
+                <a href="#docs" class="nav-link"><i class="fas fa-book"></i> Docs</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1><i class="fas fa-robot"></i> Sandbox Claws</h1>
+                <p class="subtitle">AI Agent Testing Framework</p>
+                <div class="hero-badges">
+                    <span class="badge badge-security"><i class="fas fa-shield-check"></i> VM Isolated</span>
+                    <span class="badge badge-info"><i class="fab fa-github"></i> GitHub Tracked</span>
+                    <span class="badge badge-warning"><i class="fas fa-user-shield"></i> Security Reviewed</span>
+                </div>
+                <a href="https://github.com/openclaw/openclaw" target="_blank" class="btn btn-primary">
+                    <i class="fab fa-github"></i> View OpenClaw Repository
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Security Section -->
+        <section id="security" class="section">
+            <h2 class="section-title"><i class="fas fa-lock"></i> Security-First Approach</h2>
+            <p class="section-intro">Testing AI agents requires careful security considerations. This framework implements defense-in-depth strategies.</p>
+            
+            <div class="grid-3">
+                <div class="card security-card">
+                    <div class="card-icon security-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>VM Isolation</h3>
+                    <ul class="checklist">
+                        <li><input type="checkbox" id="vm1"><label for="vm1">Create isolated container/VM environment</label></li>
+                        <li><input type="checkbox" id="vm2"><label for="vm2">Disable VM network sharing</label></li>
+                        <li><input type="checkbox" id="vm3"><label for="vm3">Snapshot VM before testing</label></li>
+                        <li><input type="checkbox" id="vm4"><label for="vm4">Limit VM resources (CPU/RAM)</label></li>
+                        <li><input type="checkbox" id="vm5"><label for="vm5">Enable VM logging</label></li>
+                    </ul>
+                </div>
+
+                <div class="card security-card">
+                    <div class="card-icon account-icon">
+                        <i class="fas fa-user-lock"></i>
+                    </div>
+                    <h3>Account Isolation</h3>
+                    <ul class="checklist">
+                        <li><input type="checkbox" id="acc1"><label for="acc1">Create dedicated Gmail account</label></li>
+                        <li><input type="checkbox" id="acc2"><label for="acc2">No personal data in test account</label></li>
+                        <li><input type="checkbox" id="acc3"><label for="acc3">Enable 2FA on test account</label></li>
+                        <li><input type="checkbox" id="acc4"><label for="acc4">Use separate password manager entry</label></li>
+                        <li><input type="checkbox" id="acc5"><label for="acc5">Monitor account activity logs</label></li>
+                    </ul>
+                </div>
+
+                <div class="card security-card">
+                    <div class="card-icon monitor-icon">
+                        <i class="fas fa-binoculars"></i>
+                    </div>
+                    <h3>Monitoring & Audit</h3>
+                    <ul class="checklist">
+                        <li><input type="checkbox" id="mon1"><label for="mon1">Log all agent actions</label></li>
+                        <li><input type="checkbox" id="mon2"><label for="mon2">Monitor network traffic</label></li>
+                        <li><input type="checkbox" id="mon3"><label for="mon3">Review file system changes</label></li>
+                        <li><input type="checkbox" id="mon4"><label for="mon4">Track API calls & data access</label></li>
+                        <li><input type="checkbox" id="mon5"><label for="mon5">Document security incidents</label></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Security Reminder:</strong> Even with VM isolation, treat this as a potentially hostile environment. Never use production credentials, personal data, or access to critical systems.
+                </div>
+            </div>
+        </section>
+
+        <!-- Setup Section -->
+        <section id="setup" class="section">
+            <h2 class="section-title"><i class="fas fa-cog"></i> Setup Guide</h2>
+            
+            <div class="setup-steps">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Mac Mini VM Setup</h3>
+                        <div class="code-block">
+                            <pre><code># Recommended VM configuration
+VM Type: Ubuntu 22.04 LTS or Debian 12
+CPU Cores: 2-4 (limited)
+RAM: 4-8 GB (limited)
+Disk: 50 GB (isolated volume)
+Network: NAT with firewall rules</code></pre>
+                        </div>
+                        <p><strong>Hypervisor Options:</strong> UTM (recommended for Mac), Parallels, VirtualBox, or VMware Fusion</p>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Test Account Setup</h3>
+                        <ul>
+                            <li>Create new Gmail: <code>openclaw.test.{random}@gmail.com</code></li>
+                            <li>Enable Google Calendar API access</li>
+                            <li>Set up Gmail filters for test emails</li>
+                            <li>Configure OAuth scopes (minimal permissions)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>GitHub Repository Setup</h3>
+                        <div class="code-block">
+                            <pre><code># Clone OpenClaw
+git clone https://github.com/openclaw/openclaw.git
+cd openclaw
+
+# Create your testing branch
+git checkout -b testing/evaluation-2026
+
+# Create documentation repo for findings
+mkdir openclaw-evaluation
+cd openclaw-evaluation
+git init
+echo "# OpenClaw Security Evaluation" > README.md
+git add README.md
+git commit -m "Initial commit"</code></pre>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Install OpenClaw</h3>
+                        <div class="code-block">
+                            <pre><code># Inside VM - Install dependencies
+pip install -r requirements.txt
+
+# Configure with test credentials
+cp .env.example .env
+# Edit .env with test account details
+
+# Verify installation
+python -m openclaw --version</code></pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testing Framework Section -->
+        <section id="testing" class="section">
+            <h2 class="section-title"><i class="fas fa-flask"></i> Testing Framework</h2>
+            
+            <div class="test-categories">
+                <div class="test-category">
+                    <h3><i class="fas fa-calendar-check"></i> Scheduling & Calendar Tests</h3>
+                    <table class="test-table">
+                        <thead>
+                            <tr>
+                                <th>Test Case</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="scheduling-tests">
+                            <tr>
+                                <td>Create single event</td>
+                                <td><span class="badge badge-priority-high">High</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>Schedule recurring events</td>
+                                <td><span class="badge badge-priority-high">High</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>Handle scheduling conflicts</td>
+                                <td><span class="badge badge-priority-medium">Medium</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>Reschedule/cancel events</td>
+                                <td><span class="badge badge-priority-medium">Medium</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="test-category">
+                    <h3><i class="fas fa-envelope"></i> Email & Communication Tests</h3>
+                    <table class="test-table">
+                        <thead>
+                            <tr>
+                                <th>Test Case</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="email-tests">
+                            <tr>
+                                <td>Send test emails</td>
+                                <td><span class="badge badge-priority-high">High</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>Read and parse emails</td>
+                                <td><span class="badge badge-priority-high">High</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>Filter and organize emails</td>
+                                <td><span class="badge badge-priority-medium">Medium</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="test-category">
+                    <h3><i class="fas fa-shield-virus"></i> Security & Boundary Tests</h3>
+                    <table class="test-table">
+                        <thead>
+                            <tr>
+                                <th>Test Case</th>
+                                <th>Priority</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="security-tests">
+                            <tr>
+                                <td>Privilege escalation attempts</td>
+                                <td><span class="badge badge-priority-critical">Critical</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>File system boundary testing</td>
+                                <td><span class="badge badge-priority-critical">Critical</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>API rate limiting & abuse</td>
+                                <td><span class="badge badge-priority-high">High</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                            <tr>
+                                <td>Data exfiltration attempts</td>
+                                <td><span class="badge badge-priority-critical">Critical</span></td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td><button class="btn-small btn-test" onclick="updateTestStatus(this, 'running')">Start Test</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Findings Dashboard -->
+        <section id="findings" class="section">
+            <h2 class="section-title"><i class="fas fa-chart-line"></i> Findings Dashboard</h2>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="tests-completed">0</div>
+                    <div class="stat-label">Tests Completed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="tests-passed">0</div>
+                    <div class="stat-label">Tests Passed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="security-issues">0</div>
+                    <div class="stat-label">Security Issues</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="documentation-entries">0</div>
+                    <div class="stat-label">Documentation Entries</div>
+                </div>
+            </div>
+
+            <div class="findings-log">
+                <h3><i class="fas fa-clipboard-list"></i> Test Results Log</h3>
+                <div class="log-controls">
+                    <button class="btn btn-secondary" onclick="addFinding()"><i class="fas fa-plus"></i> Add Finding</button>
+                    <button class="btn btn-secondary" onclick="exportFindings()"><i class="fas fa-download"></i> Export to MD</button>
+                </div>
+                <div id="findings-list" class="findings-list">
+                    <div class="empty-state">
+                        <i class="fas fa-clipboard"></i>
+                        <p>No findings yet. Start testing to populate this section.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Documentation Section -->
+        <section id="docs" class="section">
+            <h2 class="section-title"><i class="fas fa-book"></i> Documentation Repository</h2>
+            
+            <div class="docs-grid">
+                <div class="doc-card">
+                    <h3><i class="fas fa-file-code"></i> Code Snippets</h3>
+                    <p>Useful scripts and automation code</p>
+                    <button class="btn btn-secondary" onclick="showCodeEditor()">Add Code</button>
+                    <div id="code-snippets" class="snippet-list"></div>
+                </div>
+
+                <div class="doc-card">
+                    <h3><i class="fas fa-file-alt"></i> Markdown Notes</h3>
+                    <p>Testing observations and documentation</p>
+                    <button class="btn btn-secondary" onclick="showMarkdownEditor()">Add Note</button>
+                    <div id="markdown-notes" class="notes-list"></div>
+                </div>
+
+                <div class="doc-card">
+                    <h3><i class="fas fa-link"></i> Useful Resources</h3>
+                    <ul class="resource-list">
+                        <li><a href="https://github.com/openclaw/openclaw" target="_blank"><i class="fab fa-github"></i> OpenClaw Repository</a></li>
+                        <li><a href="https://github.com/openclaw/openclaw/blob/main/README.md" target="_blank"><i class="fas fa-book-open"></i> OpenClaw Documentation</a></li>
+                        <li><a href="https://github.com/openclaw/openclaw/issues" target="_blank"><i class="fas fa-bug"></i> Issue Tracker</a></li>
+                        <li><a href="#" onclick="showSecurityChecklist(); return false;"><i class="fas fa-shield-alt"></i> Security Checklist</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Executive Summary -->
+        <section id="presentation" class="section">
+            <h2 class="section-title"><i class="fas fa-presentation"></i> Executive Summary</h2>
+            <div class="presentation-card">
+                <div class="presentation-header">
+                    <h3>OpenClaw Evaluation: Security-First AI Agent Testing</h3>
+                    <button class="btn btn-primary" onclick="generateReport()">
+                        <i class="fas fa-file-pdf"></i> Generate Report
+                    </button>
+                </div>
+                
+                <div class="presentation-content">
+                    <h4>Methodology</h4>
+                    <ul>
+                        <li>Isolated VM environment on Mac Mini (UTM/Parallels)</li>
+                        <li>Dedicated Gmail test account with minimal permissions</li>
+                        <li>Network monitoring and traffic logging</li>
+                        <li>Comprehensive security boundary testing</li>
+                    </ul>
+
+                    <h4>Key Evaluation Areas</h4>
+                    <div class="eval-areas">
+                        <div class="eval-area">
+                            <i class="fas fa-calendar"></i>
+                            <span>Scheduling Capabilities</span>
+                        </div>
+                        <div class="eval-area">
+                            <i class="fas fa-shield-check"></i>
+                            <span>Security Boundaries</span>
+                        </div>
+                        <div class="eval-area">
+                            <i class="fas fa-robot"></i>
+                            <span>Autonomous Actions</span>
+                        </div>
+                        <div class="eval-area">
+                            <i class="fas fa-code"></i>
+                            <span>API Integration</span>
+                        </div>
+                    </div>
+
+                    <h4>Risk Mitigation</h4>
+                    <ul>
+                        <li>✓ VM snapshots before each test session</li>
+                        <li>✓ No production data or credentials</li>
+                        <li>✓ Network isolation and firewall rules</li>
+                        <li>✓ Comprehensive audit logging</li>
+                        <li>✓ Regular security review checkpoints</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 OpenClaw Testing Hub | Security-First AI Agent Evaluation</p>
+            <p class="footer-links">
+                <a href="https://github.com/openclaw/openclaw" target="_blank"><i class="fab fa-github"></i> OpenClaw</a>
+                <a href="#security"><i class="fas fa-lock"></i> Security Guidelines</a>
+                <a href="#docs"><i class="fas fa-book"></i> Documentation</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div id="modal-overlay" class="modal-overlay" onclick="closeModal()"></div>
+    
+    <div id="finding-modal" class="modal">
+        <div class="modal-header">
+            <h3>Add Test Finding</h3>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="finding-form">
+                <div class="form-group">
+                    <label>Finding Title</label>
+                    <input type="text" id="finding-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Severity</label>
+                    <select id="finding-severity">
+                        <option value="info">Info</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                        <option value="critical">Critical</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="finding-category">
+                        <option value="security">Security</option>
+                        <option value="functionality">Functionality</option>
+                        <option value="performance">Performance</option>
+                        <option value="usability">Usability</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="finding-description" rows="5" required></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Finding</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

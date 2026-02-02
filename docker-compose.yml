@@ -1,0 +1,226 @@
+version: '3.8'
+
+services:
+  # Web UI for the testing hub
+  web:
+    image: nginx:alpine
+    container_name: sandbox-claws-web
+    ports:
+      - "${WEB_PORT:-8080}:80"
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+      - ./css:/usr/share/nginx/html/css:ro
+      - ./js:/usr/share/nginx/html/js:ro
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    labels:
+      - "com.sandbox-claws.component=web"
+
+  # Egress filtering proxy (SECURITY: prevents data exfiltration)
+  egress-filter:
+    image: sameersbn/squid:latest
+    container_name: sandbox-claws-egress-filter
+    volumes:
+      - ./security/squid.conf:/etc/squid/squid.conf:ro
+      - ./security/allowed-domains.txt:/etc/squid/allowed-domains.txt:ro
+      - squid-cache:/var/spool/squid
+      - squid-logs:/var/log/squid
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    profiles:
+      - secure
+      - filtered
+    labels:
+      - "com.sandbox-claws.component=security"
+      - "com.sandbox-claws.security-control=egress-filter"
+
+  # OpenClaw agent in isolated environment
+  openclaw:
+    build:
+      context: ./docker/openclaw
+      dockerfile: Dockerfile
+    container_name: sandbox-claws-openclaw
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OPENCLAW_ENV=${OPENCLAW_ENV:-sandbox}
+      - OPENCLAW_LOG_LEVEL=${OPENCLAW_LOG_LEVEL:-INFO}
+      # Proxy settings (only active with 'filtered' profile)
+      - HTTP_PROXY=${HTTP_PROXY:-}
+      - HTTPS_PROXY=${HTTPS_PROXY:-}
+      - NO_PROXY=localhost,127.0.0.1
+    env_file:
+      - .env.openclaw
+    volumes:
+      - openclaw-data:/app/data
+      - openclaw-logs:/app/logs
+      - ./openclaw-config:/app/config:ro
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    depends_on:
+      - egress-filter
+    labels:
+      - "com.sandbox-claws.component=agent"
+      - "com.sandbox-claws.isolation=high"
+
+  # OpenClaw in AIR-GAPPED mode (no internet access)
+  openclaw-airgapped:
+    build:
+      context: ./docker/openclaw
+      dockerfile: Dockerfile
+    container_name: sandbox-claws-openclaw-airgapped
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OPENCLAW_ENV=airgapped
+      - OPENCLAW_LOG_LEVEL=${OPENCLAW_LOG_LEVEL:-INFO}
+      # Point to mock APIs
+      - GMAIL_API_BASE=http://mock-apis:8080/gmail
+      - CALENDAR_API_BASE=http://mock-apis:8080/calendar
+    env_file:
+      - .env.openclaw
+    volumes:
+      - openclaw-data:/app/data
+      - openclaw-logs:/app/logs
+      - ./openclaw-config:/app/config:ro
+    networks:
+      - sandbox-claws-isolated
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    profiles:
+      - airgapped
+    depends_on:
+      - mock-apis
+    labels:
+      - "com.sandbox-claws.component=agent"
+      - "com.sandbox-claws.isolation=maximum"
+      - "com.sandbox-claws.mode=airgapped"
+
+  # Mock API server for air-gapped testing
+  mock-apis:
+    image: mockserver/mockserver:latest
+    container_name: sandbox-claws-mock-apis
+    environment:
+      - MOCKSERVER_INITIALIZATION_JSON_PATH=/config/initializer.json
+      - MOCKSERVER_LOG_LEVEL=INFO
+    volumes:
+      - ./mocks:/config:ro
+    networks:
+      - sandbox-claws-isolated
+    profiles:
+      - airgapped
+    labels:
+      - "com.sandbox-claws.component=mock-api"
+
+  # Data Loss Prevention Scanner
+  dlp-scanner:
+    build:
+      context: ./docker/dlp-scanner
+      dockerfile: Dockerfile
+    container_name: sandbox-claws-dlp
+    environment:
+      - SCAN_INTERVAL=5
+      - ALERT_ON_PATTERNS=credit_card,ssn,api_key,private_key,aws_key
+      - ACTION=${DLP_ACTION:-alert}
+    volumes:
+      - openclaw-logs:/logs:ro
+      - ./security/dlp-patterns.json:/config/patterns.json:ro
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    profiles:
+      - secure
+      - dlp
+    labels:
+      - "com.sandbox-claws.component=security"
+      - "com.sandbox-claws.security-control=dlp"
+
+  # Monitoring and logging with Dozzle
+  logs:
+    image: amir20/dozzle:latest
+    container_name: sandbox-claws-logs
+    ports:
+      - "${LOG_PORT:-8081}:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    environment:
+      - DOZZLE_LEVEL=info
+      - DOZZLE_FILTER=label=com.sandbox-claws.component
+    labels:
+      - "com.sandbox-claws.component=monitoring"
+
+  # Network traffic monitoring with ntopng
+  network-monitor:
+    image: vimagick/ntopng
+    container_name: sandbox-claws-network
+    ports:
+      - "${MONITOR_PORT:-3000}:3000"
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    environment:
+      - NTOPNG_HTTP_PORT=3000
+    profiles:
+      - monitoring
+    labels:
+      - "com.sandbox-claws.component=network-monitoring"
+
+  # Cloudflare Tunnel for remote access (optional)
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: sandbox-claws-tunnel
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    profiles:
+      - remote-access
+    labels:
+      - "com.sandbox-claws.component=remote-access"
+
+networks:
+  sandbox-claws:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+  
+  # Isolated network - NO internet access (for air-gapped mode)
+  sandbox-claws-isolated:
+    driver: bridge
+    internal: true  # No external routing
+    ipam:
+      config:
+        - subnet: 172.29.0.0/16
+
+volumes:
+  openclaw-data:
+    driver: local
+  openclaw-logs:
+    driver: local
+  squid-cache:
+    driver: local
+  squid-logs:
+    driver: local

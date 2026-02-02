@@ -1,0 +1,119 @@
+# .gitignore for Agent Sandbox
+
+# Environment files with secrets
+.env
+.env.openclaw
+.env.local
+.env.*.local
+
+# Docker volumes and data
+openclaw-data/
+openclaw-logs/
+openclaw-config/
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+
+# Node modules (if extending with Node.js)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+venv/
+ENV/
+env/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+*.tmp
+
+# Snapshots and backups
+backup/
+snapshots/
+*.tar.gz
+*.zip
+
+# PID files
+*.pid
+
+# Temporary files
+tmp/
+temp/
+.cache/
+
+# SSL certificates
+*.pem
+*.key
+*.crt
+*.csr
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Proxmox specific
+*.conf.backup
+
+# Docker specific
+docker-compose.override.yml
+
+# Local test data
+test-data/
+sample-data/
+
+# Generated documentation
+docs/_build/
+site/

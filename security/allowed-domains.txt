@@ -1,0 +1,23 @@
+# Allowed domains for Sandbox Claws
+# Only these domains can be accessed by the AI agent
+# This prevents data exfiltration to unauthorized endpoints
+
+# Google APIs (Gmail, Calendar)
+.googleapis.com
+.google.com
+accounts.google.com
+oauth2.googleapis.com
+gmail.googleapis.com
+www.googleapis.com
+calendar.google.com
+
+# Google Auth
+accounts.youtube.com
+
+# If testing GitHub integration, uncomment:
+# .github.com
+# api.github.com
+# raw.githubusercontent.com
+
+# Add your approved endpoints here:
+# example-approved-api.com
