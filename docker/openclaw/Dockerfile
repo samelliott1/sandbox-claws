@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM node:22-slim
 
 # Security: Run as non-root user
 RUN groupadd -r openclaw && useradd -r -g openclaw openclaw
@@ -18,13 +18,13 @@ RUN git clone https://github.com/openclaw/openclaw.git /tmp/openclaw && \
     cp -r /tmp/openclaw/* /app/ && \
     rm -rf /tmp/openclaw
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt 2>/dev/null || \
-    echo "No requirements.txt found, skipping pip install"
+# Install Node dependencies
+RUN npm install -g openclaw@latest || \
+    (cd /app && npm install)
 
 # Create necessary directories with proper permissions
-RUN mkdir -p /app/data /app/logs /app/config && \
-    chown -R openclaw:openclaw /app
+RUN mkdir -p /app/data /app/logs /app/config /home/openclaw/.openclaw && \
+    chown -R openclaw:openclaw /app /home/openclaw
 
 # Copy entrypoint script
 COPY entrypoint.sh /entrypoint.sh
@@ -33,12 +33,15 @@ RUN chmod +x /entrypoint.sh
 # Switch to non-root user
 USER openclaw
 
-# Expose default port (if needed)
-EXPOSE 8000
+# Set HOME environment variable
+ENV HOME=/home/openclaw
+
+# Expose default gateway port
+EXPOSE 18789
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD python -c "import sys; sys.exit(0)"
+    CMD node -e "process.exit(0)"
 
 ENTRYPOINT ["/entrypoint.sh"]
-CMD ["python", "-m", "openclaw"]
+CMD ["openclaw", "gateway", "--port", "18789", "--verbose"]

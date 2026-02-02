@@ -14,9 +14,20 @@ if [ -f "/app/config/.env" ]; then
     export $(grep -v '^#' /app/config/.env | xargs)
 fi
 
-# Ensure log directory exists
+# Ensure directories exist
 mkdir -p /app/logs
 mkdir -p /app/data
+mkdir -p /home/openclaw/.openclaw
 
-echo "Starting OpenClaw..."
+# Check if OpenClaw is installed globally
+if command -v openclaw >/dev/null 2>&1; then
+    echo "OpenClaw is installed globally"
+elif [ -f "/app/packages/cli/dist/index.js" ]; then
+    echo "Using OpenClaw from source"
+    export PATH="/app/packages/cli/dist:$PATH"
+else
+    echo "Warning: OpenClaw not found, attempting to run anyway..."
+fi
+
+echo "Starting OpenClaw gateway..."
 exec "$@"
