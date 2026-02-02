@@ -36,7 +36,7 @@ services:
       - "com.sandbox-claws.component=security"
       - "com.sandbox-claws.security-control=egress-filter"
 
-  # OpenClaw agent in isolated environment
+  # OpenClaw agent in isolated environment (BASIC profile - full internet)
   openclaw:
     build:
       context: ./docker/openclaw
@@ -68,11 +68,53 @@ services:
     read_only: true
     tmpfs:
       - /tmp
+    profiles:
+      - basic
+    labels:
+      - "com.sandbox-claws.component=agent"
+      - "com.sandbox-claws.isolation=medium"
+      - "com.sandbox-claws.profile=basic"
+
+  # OpenClaw agent with egress filtering (FILTERED profile - allowlist only)
+  openclaw-filtered:
+    build:
+      context: ./docker/openclaw
+      dockerfile: Dockerfile
+    container_name: sandbox-claws-openclaw-filtered
+    environment:
+      - PYTHONUNBUFFERED=1
+      - OPENCLAW_ENV=${OPENCLAW_ENV:-sandbox}
+      - OPENCLAW_LOG_LEVEL=${OPENCLAW_LOG_LEVEL:-INFO}
+      # Proxy settings (routes through egress-filter)
+      - HTTP_PROXY=http://egress-filter:3128
+      - HTTPS_PROXY=http://egress-filter:3128
+      - NO_PROXY=localhost,127.0.0.1
+    env_file:
+      - .env.openclaw
+    volumes:
+      - openclaw-data:/app/data
+      - openclaw-logs:/app/logs
+      - ./openclaw-config:/app/config:ro
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
     depends_on:
       - egress-filter
+    profiles:
+      - filtered
     labels:
       - "com.sandbox-claws.component=agent"
       - "com.sandbox-claws.isolation=high"
+      - "com.sandbox-claws.profile=filtered"
 
   # OpenClaw in AIR-GAPPED mode (no internet access)
   openclaw-airgapped:

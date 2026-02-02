@@ -18,6 +18,7 @@ NC='\033[0m' # No Color
 # Configuration
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_NAME="agent-sandbox"
+SECURITY_PROFILE="${1:-basic}"  # Default to basic profile
 
 # Logging functions
 log_info() {
@@ -191,15 +192,33 @@ deploy_docker() {
     
     # Pull images
     log_info "Pulling Docker images..."
-    $COMPOSE_CMD pull
+    $COMPOSE_CMD pull 2>/dev/null || true
     
     # Build custom images
     log_info "Building OpenClaw container..."
-    $COMPOSE_CMD build openclaw
+    $COMPOSE_CMD build openclaw dlp-scanner
     
-    # Start services
-    log_info "Starting services..."
-    $COMPOSE_CMD up -d web openclaw logs
+    # Start services based on profile
+    log_info "Starting services with profile: $SECURITY_PROFILE"
+    case "$SECURITY_PROFILE" in
+        basic)
+            log_info "Basic profile: Full internet access (learning/demos)"
+            $COMPOSE_CMD --profile basic up -d web logs openclaw
+            ;;
+        filtered)
+            log_info "Filtered profile: Allowlist-only egress control"
+            $COMPOSE_CMD --profile filtered up -d web logs egress-filter openclaw-filtered dlp-scanner
+            ;;
+        airgapped|air-gapped)
+            log_info "Air-gapped profile: No internet access (maximum security)"
+            $COMPOSE_CMD --profile airgapped up -d web logs mock-apis openclaw-airgapped dlp-scanner
+            ;;
+        *)
+            log_error "Unknown profile: $SECURITY_PROFILE"
+            log_info "Valid profiles: basic, filtered, airgapped"
+            exit 1
+            ;;
+    esac
     
     # Wait for services to be ready
     log_info "Waiting for services to start..."
