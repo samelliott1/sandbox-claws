@@ -1,6 +1,6 @@
 # Cost Controls & Budget Enforcement
 
-**Phase 2a Feature** | Addresses the #1 pain point from Reddit community
+**New Feature** | Addresses the #1 pain point from Reddit community
 
 ---
 
@@ -22,7 +22,7 @@ Reddit users report **$300-500 bills** from uncontrolled OpenClaw agents:
 
 ## ✅ Sandbox Claws Solution
 
-Sandbox Claws **Phase 2a** adds comprehensive cost controls:
+Sandbox Claws adds comprehensive cost controls:
 
 ### 1. Real-Time Cost Tracking
 - **Session budget** - Track spending per testing session
@@ -463,7 +463,7 @@ curl http://localhost:5003/report/monthly?month=2026-02
 
 ## 📚 Related Documentation
 
-- **[Phase 1 Security Features](PHASE_1_SECURITY.md)** - Skill scanner, filesystem monitor
+- **[Advanced Security Features](ADVANCED_SECURITY.md)** - Skill scanner, filesystem monitor
 - **[Security Roadmap](../ROADMAP.md)** - Complete security enhancement plan
 - **[AI Agent Security Research](../analysis/AI_AGENT_SECURITY_RESEARCH.md)** - Industry context
 
@@ -496,13 +496,13 @@ A: Yes, simply don't start the cost-tracker profile or remove it from docker-com
 
 ## ✨ Impact
 
-### Before Phase 2a
+### Before Cost Controls
 - ❌ No cost visibility
 - ❌ $300-500 surprise bills
 - ❌ Runaway agents
 - ❌ No budget control
 
-### After Phase 2a
+### After Cost Controls
 - ✅ Real-time cost tracking
 - ✅ Configurable budget limits
 - ✅ Automatic shutdown at budget
@@ -512,4 +512,4 @@ A: Yes, simply don't start the cost-tracker profile or remove it from docker-com
 
 ---
 
-**Next:** [Phase 2b - Skill Allowlist](../ROADMAP.md#phase-2b-skill-allowlist) | **Prev:** [Phase 1 Security](PHASE_1_SECURITY.md)
+**Related:** [Advanced Security Features](ADVANCED_SECURITY.md) | [Product Roadmap](../ROADMAP.md)

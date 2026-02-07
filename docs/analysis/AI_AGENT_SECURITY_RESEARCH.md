@@ -203,7 +203,7 @@ Based on this research, we implemented the following controls:
 
 ## 📚 Additional Resources
 
-- [Phase 1 Security Features](security/PHASE_1_SECURITY.md)
+- [Advanced Security Features](../security/ADVANCED_SECURITY.md)
 - [Security Deployment Guide](SECURITY_DEPLOYMENT.md)
 - [Data Exfiltration Analysis](DATA_EXFILTRATION.md)
 - [Testing Guide](TESTING_GUIDE.md)

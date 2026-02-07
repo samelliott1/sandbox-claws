@@ -219,7 +219,7 @@ services:
     labels:
       - "com.sandbox-claws.component=security"
       - "com.sandbox-claws.security-control=skill-scanner"
-      - "com.sandbox-claws.phase=1"
+      - "com.sandbox-claws.feature=skill-scanner"
 
   # Filesystem Monitor (NEW)
   filesystem-monitor:
@@ -246,7 +246,7 @@ services:
     labels:
       - "com.sandbox-claws.component=security"
       - "com.sandbox-claws.security-control=filesystem-monitor"
-      - "com.sandbox-claws.phase=1"
+      - "com.sandbox-claws.feature=skill-scanner"
   
   # ===== END PHASE 1 SECURITY SERVICES =====
 
@@ -278,7 +278,7 @@ services:
     labels:
       - "com.sandbox-claws.component=security"
       - "com.sandbox-claws.security-control=cost-tracker"
-      - "com.sandbox-claws.phase=2a"
+      - "com.sandbox-claws.feature=cost-tracker"
   
   # ===== END PHASE 2A: COST CONTROLS =====
 

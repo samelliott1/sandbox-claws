@@ -15,7 +15,7 @@ This guide walks you through testing AI agents from scratch, including account s
 
 ## 🚀 Step-by-Step Testing Journey
 
-### **Phase 1: Initial Setup** (10 minutes)
+### **Step 1: Initial Setup** (10 minutes)
 
 #### Step 1: Deploy Sandbox Claws
 
@@ -100,7 +100,7 @@ cd sandbox-claws
 
 ---
 
-### **Phase 2: Basic Functionality Tests** (10 minutes)
+### **Step 2: Basic Functionality Tests** (10 minutes)
 
 Open Web UI: http://localhost:8080
 
@@ -165,7 +165,7 @@ Open Web UI: http://localhost:8080
 
 ---
 
-### **Phase 3: Security Boundary Tests** (10 minutes)
+### **3. Security Boundary Tests** (10 minutes)
 
 ⚠️ **Important:** These tests intentionally try to break security boundaries!
 
@@ -229,7 +229,7 @@ Open Web UI: http://localhost:8080
 
 ---
 
-### **Phase 4: Advanced Tests** (Optional)
+### **4. Advanced Tests** (Optional)
 
 #### Test Case 7: GitHub Repository Access 🐙
 
