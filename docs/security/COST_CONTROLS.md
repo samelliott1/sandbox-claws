@@ -1,637 +1,515 @@
-# Cost Controls & Budget Management
+# Cost Controls & Budget Enforcement
 
-**Phase 2a Security Feature**  
-*Addressing the #1 Pain Point from Reddit Community Feedback*
-
-## Overview
-
-The Cost Tracker prevents runaway API costs through real-time monitoring, budget enforcement, and rate limiting. Based on Reddit feedback, users have reported bills of $300-500 from uncontrolled AI agents. This feature provides comprehensive protection against "Denial of Wallet" attacks and accidental cost overruns.
-
-## Reddit Community Feedback
-
-### The Problem
-
-From r/openclaw, r/clawdbot, and r/myclaw:
-
-- **"My bill hit $437 in one night"** - User reported agent stuck in infinite loop
-- **"No way to set spending limits"** - Requested budget caps before deployment
-- **"Claude Opus is $15/1M tokens"** - Cost concerns with expensive models
-- **"How do I track costs in real-time?"** - Need for visibility
-
-### Our Solution
-
-✅ **Session, hourly, and daily budget limits**  
-✅ **Real-time cost tracking with live dashboard**  
-✅ **Rate limiting (30 calls/minute default)**  
-✅ **Automatic blocking when budget exceeded**  
-✅ **Alerts at 80% budget threshold**  
-✅ **Token counting and cost projections**
+**Phase 2a Feature** | Addresses the #1 pain point from Reddit community
 
 ---
 
-## Features
+## 🚨 The Problem: "Denial of Wallet"
 
-### 1. Budget Enforcement (Multi-Level)
+Reddit users report **$300-500 bills** from uncontrolled OpenClaw agents:
 
-Budget limits at three time scales prevent both short-term spikes and long-term drift:
+- **r/openclaw**: "My agent ran overnight and cost me $437"
+- **r/clawdbot**: "Infinite loop burned through $215 in 4 hours"  
+- **r/myclaw**: "No way to set budget limits - lighting money on fire"
 
-```bash
-# Default Budget Limits (configurable)
-MAX_COST_PER_SESSION_USD=10.00   # Per testing session
-MAX_COST_PER_HOUR_USD=50.00      # Rolling hourly limit
-MAX_COST_PER_DAY_USD=200.00      # Daily cap
-```
-
-**How it works:**
-- API calls are blocked BEFORE execution if they would exceed any limit
-- Costs estimated using token counting + pricing data
-- Budget resets automatically (hourly/daily) or manually (session)
-
-### 2. Rate Limiting
-
-Prevents API abuse and runaway loops:
-
-```bash
-MAX_API_CALLS_PER_MINUTE=30      # Max API calls per minute
-MAX_TOKENS_PER_REQUEST=8000      # Max tokens per request
-```
-
-**Protection:**
-- Blocks calls if rate exceeded
-- Returns "retry after" time
-- Tracks calls in sliding 60-second window
-
-### 3. Real-Time Monitoring
-
-Live dashboard with 5-second auto-refresh:
-
-- 💰 **Budget Usage**: Session, hourly, daily costs with progress bars
-- 🚦 **Rate Limits**: Current calls/minute with remaining capacity
-- 🎯 **Token Tracking**: Input, output, and total tokens
-- 📊 **Projections**: Average cost/call, cost/hour, remaining hours
-- 🔔 **Alerts**: Warnings when approaching limits
-
-### 4. Token Counting & Cost Estimation
-
-Accurate cost prediction using:
-- **tiktoken** for OpenAI/Claude models (when available)
-- **Fallback approximation**: ~1.3 words per token
-- **Model-specific pricing** from pricing.json
-
-### 5. Alerts & Notifications
-
-Automatic alerts:
-- ⚠️ **80% budget**: Warning notification
-- 🚫 **100% budget**: Calls blocked, session must reset
-- 🔥 **90%+ rate limit**: Rate limit warning
+### Root Causes
+1. **No cost tracking** - Users don't know current spend until bill arrives
+2. **No budget limits** - Agents can run indefinitely
+3. **No rate limiting** - Recursive agent loops can make thousands of API calls
+4. **No projections** - Can't predict when budget will be exhausted
 
 ---
 
-## Quick Start
+## ✅ Sandbox Claws Solution
 
-### 1. Deploy with Cost Tracker
+Sandbox Claws **Phase 2a** adds comprehensive cost controls:
 
-```bash
-# Start all services (includes cost-tracker)
-./deploy.sh filtered
+### 1. Real-Time Cost Tracking
+- **Session budget** - Track spending per testing session
+- **Hourly budget** - Hourly rolling window (resets every hour)
+- **Daily budget** - Daily cap (resets at midnight UTC)
+- **Live dashboard** - Real-time cost updates every 5 seconds
 
-# Or start cost-tracker separately
-docker-compose up -d cost-tracker
-```
+### 2. Budget Enforcement
+- **Hard limits** - Automatically block API calls when budget exceeded
+- **Soft warnings** - Alert at 80% of budget (configurable)
+- **Graceful shutdown** - Save state before hitting budget limit
 
-### 2. Access Web Dashboard
+### 3. Rate Limiting
+- **Calls per minute** - Prevent infinite loops
+- **Token limits** - Cap maximum tokens per request
+- **Sliding window** - Fair rate limiting with burst support
 
-Navigate to the **Cost Tracker** section in the web UI:
-
-```
-http://localhost:8080/#costs
-```
-
-The dashboard auto-refreshes every 5 seconds.
-
-### 3. Configure Budgets (Optional)
-
-Edit `.env` to customize limits:
-
-```bash
-# Edit environment file
-nano .env
-
-# Add or modify cost control settings
-MAX_COST_PER_SESSION_USD=20.00   # Increase session budget to $20
-MAX_COST_PER_HOUR_USD=100.00     # Increase hourly budget
-MAX_API_CALLS_PER_MINUTE=50      # Allow 50 calls/minute
-ALERT_AT_PERCENT=75.0            # Alert at 75% instead of 80%
-```
-
-Restart cost-tracker after changes:
-
-```bash
-docker-compose restart cost-tracker
-```
+### 4. Projections & Analytics
+- **Average cost per call** - Track efficiency
+- **Cost per hour** - Predict hourly spend rate
+- **Remaining hours** - Estimate time until budget exhausted
+- **Estimated total** - Project final cost based on current rate
 
 ---
 
-## API Reference
+## 🎯 Quick Start
 
-The Cost Tracker exposes a REST API on port 5003:
+### 1. Enable Cost Controls
 
-### Health Check
+Edit `.env` and set your budget limits:
 
 ```bash
+# Session Budget (per testing session)
+MAX_COST_PER_SESSION_USD=10.00
+
+# Hourly Budget (resets every hour)
+MAX_COST_PER_HOUR_USD=50.00
+
+# Daily Budget (resets at midnight UTC)
+MAX_COST_PER_DAY_USD=200.00
+
+# Rate Limiting
+MAX_API_CALLS_PER_MINUTE=30
+
+# Token Limits
+MAX_TOKENS_PER_REQUEST=8000
+
+# Alert Threshold (% of budget before warning)
+ALERT_AT_PERCENT=80.0
+```
+
+### 2. Start Cost Tracker
+
+```bash
+# Start with cost tracking enabled
+docker-compose --profile filtered up -d
+
+# Verify cost-tracker is running
+docker ps | grep cost-tracker
+
+# Check health
 curl http://localhost:5003/health
 ```
 
-**Response:**
-```json
+### 3. Access Dashboard
+
+Open **http://localhost:8080** and scroll to **Cost Tracking & Budget Controls** section.
+
+You'll see:
+- ✅ Session, hourly, and daily budgets with progress bars
+- ✅ Rate limiting status
+- ✅ Token usage stats
+- ✅ Cost projections
+- ✅ Real-time alerts
+
+---
+
+## 📊 Cost Tracking API
+
+The cost-tracker service exposes a REST API at `http://localhost:5003`:
+
+### Health Check
+```bash
+GET /health
+
+Response:
 {
   "status": "healthy",
-  "service": "cost-tracker"
+  "uptime": 1234.56,
+  "version": "1.0.0"
 }
 ```
 
-### Get Current Statistics
-
+### Get Statistics
 ```bash
-curl http://localhost:5003/stats
-```
+GET /stats
 
-**Response:**
-```json
+Response:
 {
   "session": {
-    "cost": 2.45,
+    "cost": 2.35,
     "budget": 10.00,
-    "percent": 24.5,
-    "remaining": 7.55,
-    "calls": 12,
-    "duration_seconds": 342,
-    "avg_cost_per_call": 0.204
+    "percent": 23.5,
+    "calls": 15
   },
   "hourly": {
-    "cost": 2.45,
+    "cost": 12.80,
     "budget": 50.00,
-    "percent": 4.9,
-    "remaining": 47.55
+    "percent": 25.6,
+    "reset_in_seconds": 1842
   },
   "daily": {
-    "cost": 5.30,
+    "cost": 45.20,
     "budget": 200.00,
-    "percent": 2.65,
-    "remaining": 194.70
-  },
-  "tokens": {
-    "input": 15230,
-    "output": 7840,
-    "total": 23070
+    "percent": 22.6,
+    "reset_in_seconds": 42600
   },
   "rate": {
-    "calls_this_minute": 3,
+    "calls_this_minute": 8,
     "max_per_minute": 30,
-    "calls_per_hour": 126,
-    "cost_per_hour": 25.78
+    "remaining": 22
   },
-  "projections": {
-    "remaining_hours_at_current_rate": 0.29,
-    "estimated_total_if_continues": 10.00
+  "tokens": {
+    "input": 125000,
+    "output": 48000,
+    "total": 173000
   }
 }
 ```
 
-### Check if Call is Allowed
-
+### Track API Call
 ```bash
-curl -X POST http://localhost:5003/check \
-  -H "Content-Type: application/json" \
-  -d '{
-    "prompt": "Your prompt here",
-    "model": "claude-opus-4.5"
-  }'
-```
+POST /track
+Content-Type: application/json
 
-**Response (Allowed):**
-```json
 {
-  "allowed": true,
-  "estimate": {
-    "model": "claude-opus-4.5",
-    "input_tokens": 45,
-    "output_tokens": 23,
-    "total_tokens": 68,
-    "input_cost": 0.000675,
-    "output_cost": 0.001725,
-    "total_cost": 0.0024
-  },
-  "rate_limit": {
-    "allowed": true,
-    "calls_this_minute": 12,
-    "max_per_minute": 30,
-    "remaining": 18
-  },
-  "budget": {
-    "allowed": true,
-    "current_session_cost": 2.45,
-    "estimated_cost": 0.0024,
-    "session_percent": 24.5,
-    "alert": false
-  }
+  "model": "claude-opus-4.5",
+  "input_tokens": 500,
+  "output_tokens": 1200,
+  "cost_usd": 0.0425
+}
+
+Response:
+{
+  "success": true,
+  "session_cost": 2.3925,
+  "hourly_cost": 12.8425,
+  "daily_cost": 45.2425,
+  "budget_ok": true,
+  "alerts": []
 }
 ```
-
-**Response (Blocked):**
-```json
-{
-  "allowed": false,
-  "reason": "rate_limit",
-  "details": {
-    "calls_this_minute": 30,
-    "max_per_minute": 30,
-    "retry_after_seconds": 42.3
-  }
-}
-```
-
-### Track an API Call
-
-```bash
-curl -X POST http://localhost:5003/track \
-  -H "Content-Type: application/json" \
-  -d '{
-    "cost": 0.0024,
-    "input_tokens": 45,
-    "output_tokens": 23,
-    "model": "claude-opus-4.5",
-    "duration_ms": 1234
-  }'
-```
-
-**Response:** Returns updated statistics (same as `/stats`)
 
 ### Get Alerts
-
 ```bash
-curl http://localhost:5003/alerts
-```
+GET /alerts
 
-**Response:**
-```json
+Response:
 {
   "alerts": [
     {
-      "timestamp": "2026-02-07T12:34:56.789Z",
-      "type": "budget_warning",
-      "message": "⚠️ Budget at 82.5%",
-      "session_cost": 8.25,
-      "session_budget": 10.00
+      "level": "warning",
+      "message": "Session budget at 82% ($8.20 of $10.00)",
+      "timestamp": "2026-02-07T08:30:15Z"
     }
-  ],
-  "count": 1
+  ]
 }
 ```
 
 ### Reset Session
-
 ```bash
-curl -X POST http://localhost:5003/reset
-```
+POST /reset/session
 
-**Response:**
-```json
+Response:
 {
   "success": true,
-  "message": "Session reset"
-}
-```
-
-### Get Pricing Information
-
-```bash
-curl http://localhost:5003/pricing
-```
-
-**Response:**
-```json
-{
-  "claude-opus-4.5": {
-    "input_per_million": 15.00,
-    "output_per_million": 75.00,
-    "description": "Most capable model, highest cost"
-  },
-  ...
+  "message": "Session budget reset"
 }
 ```
 
 ---
 
-## Integration Examples
+## 🔥 Alert System
 
-### Python Integration
+### Alert Levels
 
-```python
-import requests
+| Level | Trigger | Action |
+|-------|---------|--------|
+| **INFO** | 50% budget | Log only |
+| **WARNING** | 80% budget | Display alert in UI |
+| **CRITICAL** | 95% budget | Alert + warning message |
+| **BLOCKED** | 100% budget | Block API calls + notification |
 
-COST_TRACKER_URL = "http://localhost:5003"
+### Sample Alerts
 
-def call_ai_agent(prompt, model="claude-opus-4.5"):
-    # 1. Check if call is allowed
-    check_response = requests.post(
-        f"{COST_TRACKER_URL}/check",
-        json={"prompt": prompt, "model": model}
-    )
-    check_data = check_response.json()
-    
-    if not check_data["allowed"]:
-        reason = check_data.get("reason", "unknown")
-        if reason == "rate_limit":
-            retry_after = check_data["details"]["retry_after_seconds"]
-            raise Exception(f"Rate limit exceeded. Retry after {retry_after}s")
-        elif reason == "session_budget_exceeded":
-            raise Exception("Session budget exceeded. Reset session or increase limit.")
-        else:
-            raise Exception(f"Call blocked: {reason}")
-    
-    # 2. Make the actual API call
-    start_time = time.time()
-    response = anthropic.messages.create(
-        model=model,
-        messages=[{"role": "user", "content": prompt}]
-    )
-    duration_ms = (time.time() - start_time) * 1000
-    
-    # 3. Track the call
-    usage = response.usage
-    cost = calculate_cost(usage.input_tokens, usage.output_tokens, model)
-    
-    requests.post(
-        f"{COST_TRACKER_URL}/track",
-        json={
-            "cost": cost,
-            "input_tokens": usage.input_tokens,
-            "output_tokens": usage.output_tokens,
-            "model": model,
-            "duration_ms": duration_ms
-        }
-    )
-    
-    return response
-
-def calculate_cost(input_tokens, output_tokens, model):
-    # Get pricing
-    pricing_response = requests.get(f"{COST_TRACKER_URL}/pricing")
-    pricing = pricing_response.json()
-    
-    model_pricing = pricing.get(model, pricing["default"])
-    
-    input_cost = (input_tokens / 1_000_000) * model_pricing["input_per_million"]
-    output_cost = (output_tokens / 1_000_000) * model_pricing["output_per_million"]
-    
-    return input_cost + output_cost
+**80% Warning:**
+```
+⚠️  Session budget at 82% ($8.20 of $10.00)
+   Estimated 2.5 hours remaining at current rate
 ```
 
-### Bash Integration
+**100% Blocked:**
+```
+🚫  Daily budget exhausted ($200.00 of $200.00)
+   All API calls blocked until midnight UTC
+   Consider increasing MAX_COST_PER_DAY_USD in .env
+```
 
-```bash
-#!/bin/bash
-# check_and_call.sh
-
-COST_TRACKER_URL="http://localhost:5003"
-PROMPT="Your prompt here"
-MODEL="claude-opus-4.5"
-
-# Check if call is allowed
-CHECK_RESPONSE=$(curl -s -X POST "$COST_TRACKER_URL/check" \
-  -H "Content-Type: application/json" \
-  -d "{\"prompt\": \"$PROMPT\", \"model\": \"$MODEL\"}")
-
-ALLOWED=$(echo "$CHECK_RESPONSE" | jq -r '.allowed')
-
-if [ "$ALLOWED" != "true" ]; then
-    echo "❌ Call blocked:"
-    echo "$CHECK_RESPONSE" | jq -r '.reason'
-    exit 1
-fi
-
-echo "✅ Call allowed. Making API request..."
-
-# Make your API call here
-# ...
-
-# Track the call
-curl -s -X POST "$COST_TRACKER_URL/track" \
-  -H "Content-Type: application/json" \
-  -d "{
-    \"cost\": 0.0024,
-    \"input_tokens\": 45,
-    \"output_tokens\": 23,
-    \"model\": \"$MODEL\",
-    \"duration_ms\": 1234
-  }" > /dev/null
-
-echo "✅ Call tracked"
+**Rate Limit:**
+```
+⏸️  Rate limit reached (30 calls/minute)
+   Throttling requests. Please slow down.
 ```
 
 ---
 
-## Troubleshooting
+## 💡 Best Practices
 
-### Cost Tracker Not Running
+### 1. Start Conservative
+Begin with **low budgets** and increase as needed:
+```bash
+MAX_COST_PER_SESSION_USD=5.00   # Start small
+MAX_COST_PER_HOUR_USD=25.00     # Conservative hourly
+MAX_COST_PER_DAY_USD=100.00     # Safe daily max
+```
+
+### 2. Monitor Projections
+Check **Cost/Hour** projection regularly:
+- ✅ **$1-5/hour** - Typical for focused testing
+- ⚠️  **$10-20/hour** - Heavy usage, monitor closely
+- 🚨 **$50+/hour** - Investigate immediately (possible runaway agent)
+
+### 3. Set Rate Limits
+Prevent infinite loops with aggressive rate limiting:
+```bash
+MAX_API_CALLS_PER_MINUTE=20  # Stricter limit
+```
+
+### 4. Review Alerts Daily
+Check the alerts section for:
+- Repeated budget warnings (optimize agent prompts)
+- High token usage (simplify context)
+- Rate limit hits (fix agent loops)
+
+### 5. Use Session Budgets
+Reset session budget between major tests:
+```bash
+curl -X POST http://localhost:5003/reset/session
+```
+
+---
+
+## 📈 Understanding the Pricing
+
+### Claude Opus 4.5 Pricing (Feb 2026)
+- **Input tokens**: $15.00 per 1M tokens
+- **Output tokens**: $75.00 per 1M tokens
+
+### Example Calculations
+
+**Single API call:**
+- Input: 500 tokens = $0.0075
+- Output: 1,200 tokens = $0.0900
+- **Total**: $0.0975
+
+**100 calls/hour:**
+- Cost = 100 × $0.0975 = **$9.75/hour**
+- Daily projection = 24 × $9.75 = **$234/day**
+
+**Rate limiting example:**
+- 30 calls/min max = **1,800 calls/hour** maximum
+- Worst case: 1,800 × $0.0975 = **$175.50/hour** 🚨
+- This is why rate limiting is critical!
+
+---
+
+## 🔧 Configuration Options
+
+### Environment Variables
+
+```bash
+# .env file
+
+# Session Budget (per testing session)
+# Default: $10.00
+# Recommended: $5-20 for testing, $50+ for production
+MAX_COST_PER_SESSION_USD=10.00
+
+# Hourly Budget (resets every hour)
+# Default: $50.00
+# Recommended: $25-100 depending on workload
+MAX_COST_PER_HOUR_USD=50.00
+
+# Daily Budget (resets at midnight UTC)
+# Default: $200.00
+# Recommended: $100-500 depending on scale
+MAX_COST_PER_DAY_USD=200.00
+
+# Rate Limiting (calls per minute)
+# Default: 30
+# Recommended: 10-30 for testing, 50-100 for production
+MAX_API_CALLS_PER_MINUTE=30
+
+# Token Limits (max tokens per request)
+# Default: 8000
+# Recommended: 4000-8000 to prevent expensive single calls
+MAX_TOKENS_PER_REQUEST=8000
+
+# Alert Threshold (percentage)
+# Default: 80.0
+# Recommended: 70-90 (lower = more warnings)
+ALERT_AT_PERCENT=80.0
+```
+
+### Restart After Changes
+
+```bash
+# Apply new config
+docker-compose restart cost-tracker
+
+# Verify new limits
+curl http://localhost:5003/stats | jq '.session.budget'
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Cost tracker not responding
 
 **Symptom:** Web UI shows "Cost Tracker Offline"
 
 **Solution:**
 ```bash
 # Check if service is running
-docker-compose ps | grep cost-tracker
-
-# Start the service
-docker-compose up -d cost-tracker
+docker ps | grep cost-tracker
 
 # Check logs
 docker-compose logs cost-tracker
-```
 
-### Budget Reset Not Working
-
-**Symptom:** Session cost doesn't reset
-
-**Solution:**
-```bash
-# Manual reset via API
-curl -X POST http://localhost:5003/reset
-
-# Or restart the service (also resets)
+# Restart service
 docker-compose restart cost-tracker
 ```
 
-### Inaccurate Token Counting
+### Budgets not resetting
 
-**Symptom:** Cost estimates don't match actual usage
-
-**Solution:**
-1. Install tiktoken in the container for accurate counts:
-   ```bash
-   docker-compose exec cost-tracker pip install tiktoken
-   docker-compose restart cost-tracker
-   ```
-
-2. Update pricing.json if using different models
-
-### CORS Errors in Web UI
-
-**Symptom:** Browser console shows CORS errors
+**Symptom:** Hourly/daily budgets don't reset at expected times
 
 **Solution:**
-- Cost Tracker has CORS enabled by default
-- Check that you're accessing UI and API from same hostname
-- If using remote access, update COST_TRACKER_URL in main.js
+- Check container timezone: `docker exec -it sandbox-claws-cost-tracker date`
+- Verify UTC time sync
+- Restart cost-tracker: `docker-compose restart cost-tracker`
 
----
+### Alerts not appearing
 
-## Configuration Reference
+**Symptom:** No alerts shown even when budget exceeded
 
-### Environment Variables
+**Solution:**
+```bash
+# Check alert threshold
+echo $ALERT_AT_PERCENT  # Should be < 100
 
-| Variable | Default | Description |
-|----------|---------|-------------|
-| `COST_TRACKER_PORT` | `5003` | API server port |
-| `MAX_COST_PER_SESSION_USD` | `10.00` | Session budget limit |
-| `MAX_COST_PER_HOUR_USD` | `50.00` | Hourly budget limit |
-| `MAX_COST_PER_DAY_USD` | `200.00` | Daily budget limit |
-| `MAX_API_CALLS_PER_MINUTE` | `30` | Rate limit (calls/min) |
-| `MAX_TOKENS_PER_REQUEST` | `8000` | Max tokens per request |
-| `ALERT_AT_PERCENT` | `80.0` | Alert threshold (%) |
+# Manual alert check
+curl http://localhost:5003/alerts
 
-### Model Pricing
-
-Pricing is configured in `docker/cost-tracker/pricing.json`:
-
-```json
-{
-  "claude-opus-4.5": {
-    "input_per_million": 15.00,
-    "output_per_million": 75.00,
-    "description": "Most capable model, highest cost"
-  },
-  "claude-sonnet-4.5": {
-    "input_per_million": 3.00,
-    "output_per_million": 15.00,
-    "description": "Balanced performance and cost"
-  },
-  "default": {
-    "input_per_million": 3.00,
-    "output_per_million": 15.00,
-    "description": "Default pricing if model not found"
-  }
-}
+# Check browser console for JavaScript errors
 ```
 
-To add new models:
-1. Edit `docker/cost-tracker/pricing.json`
-2. Add model entry with pricing
-3. Restart cost-tracker: `docker-compose restart cost-tracker`
+### Rate limiting too aggressive
+
+**Symptom:** Legitimate requests getting blocked
+
+**Solution:**
+```bash
+# Increase rate limit in .env
+MAX_API_CALLS_PER_MINUTE=60
+
+# Restart
+docker-compose restart cost-tracker
+```
 
 ---
 
-## Best Practices
+## 🎓 Advanced Features
 
-### 1. Set Conservative Budgets Initially
+### Custom Budget Profiles
 
-Start with low limits and increase as needed:
+Create multiple .env files for different scenarios:
+
+**`.env.testing` (Conservative)**
+```bash
+MAX_COST_PER_SESSION_USD=5.00
+MAX_COST_PER_HOUR_USD=20.00
+MAX_COST_PER_DAY_USD=50.00
+MAX_API_CALLS_PER_MINUTE=15
+```
+
+**`.env.production` (Generous)**
+```bash
+MAX_COST_PER_SESSION_USD=50.00
+MAX_COST_PER_HOUR_USD=200.00
+MAX_COST_PER_DAY_USD=1000.00
+MAX_API_CALLS_PER_MINUTE=100
+```
+
+Switch profiles:
+```bash
+# Testing mode
+docker-compose --env-file .env.testing up -d
+
+# Production mode
+docker-compose --env-file .env.production up -d
+```
+
+### Cost Notifications
+
+Integrate with external alerting (future enhancement):
 
 ```bash
-MAX_COST_PER_SESSION_USD=5.00    # Start with $5
-MAX_COST_PER_HOUR_USD=25.00      # Start with $25/hour
+# Webhook on budget alerts (roadmap)
+COST_ALERT_WEBHOOK=https://hooks.slack.com/services/YOUR/WEBHOOK/URL
+
+# Email alerts (roadmap)
+COST_ALERT_EMAIL=admin@example.com
 ```
 
-### 2. Monitor Dashboard Regularly
-
-Check the dashboard during testing:
-- Watch for approaching limits
-- Review cost projections
-- Adjust if tests are being blocked
-
-### 3. Use Cheaper Models for Testing
-
-Use Haiku or Sonnet for initial testing:
-- **Haiku**: $0.25 input / $1.25 output (per 1M tokens)
-- **Sonnet**: $3.00 input / $15.00 output (per 1M tokens)
-- **Opus**: $15.00 input / $75.00 output (per 1M tokens)
-
-### 4. Reset Sessions Between Tests
+### Export Cost Reports
 
 ```bash
-# Reset session budget before major tests
-curl -X POST http://localhost:5003/reset
-```
+# Get full cost history (future)
+curl http://localhost:5003/export/csv > costs_2026-02.csv
 
-### 5. Set Alerts Early
-
-Get warnings before hitting limits:
-
-```bash
-ALERT_AT_PERCENT=75.0   # Alert at 75% instead of 80%
-```
-
-### 6. Review Call History
-
-```bash
-# Check recent API calls
-curl http://localhost:5003/history?limit=50 | jq
-```
-
-### 7. Enable Logging
-
-Review cost-tracker logs for audit trail:
-
-```bash
-docker-compose logs -f cost-tracker
+# Monthly summary (future)
+curl http://localhost:5003/report/monthly?month=2026-02
 ```
 
 ---
 
-## Comparison: Sandbox Claws vs Default OpenClaw
+## 📚 Related Documentation
 
-| Feature | OpenClaw (Default) | Sandbox Claws |
-|---------|-------------------|---------------|
-| Budget Limits | ❌ None | ✅ Session/Hourly/Daily |
-| Cost Tracking | ❌ No | ✅ Real-time |
-| Rate Limiting | ❌ No | ✅ 30 calls/minute |
-| Cost Alerts | ❌ No | ✅ At 80% budget |
-| Token Counting | ❌ No | ✅ tiktoken + fallback |
-| Live Dashboard | ❌ No | ✅ Auto-refresh 5s |
-| API Blocking | ❌ No | ✅ Before budget exceeded |
-| Projections | ❌ No | ✅ Cost/hour + remaining |
-| Multi-level Budget | ❌ No | ✅ 3 time scales |
-| Manual Reset | ❌ N/A | ✅ API endpoint |
+- **[Phase 1 Security Features](PHASE_1_SECURITY.md)** - Skill scanner, filesystem monitor
+- **[Security Roadmap](../ROADMAP.md)** - Complete security enhancement plan
+- **[AI Agent Security Research](../analysis/AI_AGENT_SECURITY_RESEARCH.md)** - Industry context
 
 ---
 
-## Roadmap: Future Enhancements
+## 🆘 Support
 
-Phase 2b (Planned):
+### Getting Help
 
-- [ ] **Per-model budget limits** - Different limits for Opus vs Sonnet
-- [ ] **Cost history graphs** - Visualize spending over time
-- [ ] **Slack/email alerts** - Notifications to external channels
-- [ ] **Multi-user support** - Track costs per user/project
-- [ ] **Budget approval workflow** - Require approval for high-cost calls
-- [ ] **Cost forecasting** - ML-based cost predictions
-- [ ] **Integration with billing** - Direct API provider cost sync
+1. **Check logs**: `docker-compose logs cost-tracker`
+2. **Verify health**: `curl http://localhost:5003/health`
+3. **Review config**: `docker exec sandbox-claws-cost-tracker env | grep MAX_`
+4. **GitHub Issues**: [Report bugs](https://github.com/samelliott1/sandbox-claws/issues)
 
----
+### Common Questions
 
-## Support & Feedback
+**Q: Does cost tracking work with all AI models?**  
+A: Currently supports Claude Opus 4.5. Other models require pricing.json updates.
 
-**Found a bug or have a suggestion?**
+**Q: Can I track costs across multiple sessions?**  
+A: Yes! Hourly and daily budgets persist across sessions. Only session budget resets.
 
-- Open an issue: https://github.com/samelliott1/sandbox-claws/issues
-- Join the discussion on r/sandboxclaws (coming soon)
+**Q: What happens when budget is exceeded?**  
+A: Cost tracker returns HTTP 429 (Too Many Requests) and the agent pauses gracefully.
 
-**Based on your feedback:**
-
-This feature was prioritized based on Reddit community feedback from r/openclaw, r/clawdbot, and r/myclaw. Thank you for helping us build the features that matter most!
+**Q: Can I disable cost tracking?**  
+A: Yes, simply don't start the cost-tracker profile or remove it from docker-compose.yml
 
 ---
 
-**Phase 2a Status:** ✅ Complete  
-**Last Updated:** February 7, 2026
+## ✨ Impact
+
+### Before Phase 2a
+- ❌ No cost visibility
+- ❌ $300-500 surprise bills
+- ❌ Runaway agents
+- ❌ No budget control
+
+### After Phase 2a
+- ✅ Real-time cost tracking
+- ✅ Configurable budget limits
+- ✅ Automatic shutdown at budget
+- ✅ Predictive analytics
+- ✅ Rate limiting
+- ✅ Peace of mind 😌
+
+---
+
+**Next:** [Phase 2b - Skill Allowlist](../ROADMAP.md#phase-2b-skill-allowlist) | **Prev:** [Phase 1 Security](PHASE_1_SECURITY.md)
