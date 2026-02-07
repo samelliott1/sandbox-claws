@@ -117,3 +117,6 @@ sample-data/
 # Generated documentation
 docs/_build/
 site/secrets/
+
+# Internal documentation (not for public repo)
+docs/internal/
