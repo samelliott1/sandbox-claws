@@ -1033,3 +1033,199 @@ code {
 ::-webkit-scrollbar-thumb:hover {
     background: #475569;
 }
+/* =============================================================================
+   COST TRACKING STYLES (Phase 2a)
+   ============================================================================= */
+
+.cost-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.cost-card h3 {
+    color: white;
+    margin-top: 0.5rem;
+}
+
+.cost-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.cost-display {
+    margin-top: 1rem;
+}
+
+.cost-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.25rem;
+}
+
+.cost-limit {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin-bottom: 1rem;
+}
+
+.cost-detail {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #2ecc71;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 4px;
+}
+
+.rate-info, .token-info {
+    padding: 1rem 0;
+}
+
+.rate-stat, .token-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0.75rem 0;
+}
+
+.rate-label, .token-label {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.rate-value, .token-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.rate-max {
+    font-size: 1rem;
+    color: #95a5a6;
+}
+
+.rate-detail {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.projection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.projection-item {
+    text-align: center;
+}
+
+.projection-label {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-bottom: 0.5rem;
+}
+
+.projection-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.cost-controls-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.cost-controls-header h3 {
+    margin: 0;
+}
+
+.cost-alerts {
+    min-height: 100px;
+}
+
+.cost-alert {
+    display: flex;
+    align-items: start;
+    padding: 1rem;
+    background: #fff3cd;
+    border-left: 4px solid #ffc107;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.cost-alert.budget_warning {
+    background: #f8d7da;
+    border-left-color: #dc3545;
+}
+
+.alert-icon {
+    font-size: 1.5rem;
+    margin-right: 1rem;
+    color: #856404;
+}
+
+.cost-alert.budget_warning .alert-icon {
+    color: #721c24;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-message {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.alert-time {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.config-info {
+    line-height: 1.8;
+}
+
+.config-info code {
+    background: #f8f9fa;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cost-value {
+        font-size: 2rem;
+    }
+    
+    .projection-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}

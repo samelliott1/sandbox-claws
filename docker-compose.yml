@@ -250,6 +250,38 @@ services:
   
   # ===== END PHASE 1 SECURITY SERVICES =====
 
+  # ===== PHASE 2A: COST CONTROLS =====
+  
+  # Cost Tracker Service (NEW)
+  cost-tracker:
+    build:
+      context: ./docker/cost-tracker
+      dockerfile: Dockerfile
+    container_name: sandbox-claws-cost-tracker
+    ports:
+      - "${COST_TRACKER_PORT:-5003}:5003"
+    environment:
+      - COST_TRACKER_PORT=5003
+      - MAX_COST_PER_SESSION_USD=${MAX_COST_PER_SESSION_USD:-10.00}
+      - MAX_COST_PER_HOUR_USD=${MAX_COST_PER_HOUR_USD:-50.00}
+      - MAX_COST_PER_DAY_USD=${MAX_COST_PER_DAY_USD:-200.00}
+      - MAX_API_CALLS_PER_MINUTE=${MAX_API_CALLS_PER_MINUTE:-30}
+      - MAX_TOKENS_PER_REQUEST=${MAX_TOKENS_PER_REQUEST:-8000}
+      - ALERT_AT_PERCENT=${ALERT_AT_PERCENT:-80.0}
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    profiles:
+      - basic
+      - filtered
+      - secure
+    labels:
+      - "com.sandbox-claws.component=security"
+      - "com.sandbox-claws.security-control=cost-tracker"
+      - "com.sandbox-claws.phase=2a"
+  
+  # ===== END PHASE 2A: COST CONTROLS =====
+
   # Monitoring and logging with Dozzle
   logs:
     image: amir20/dozzle:latest

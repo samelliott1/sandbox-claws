@@ -17,6 +17,7 @@
             </div>
             <div class="nav-links">
                 <a href="#security" class="nav-link"><i class="fas fa-lock"></i> Security</a>
+                <a href="#costs" class="nav-link"><i class="fas fa-dollar-sign"></i> Cost Tracker</a>
                 <a href="#setup" class="nav-link"><i class="fas fa-cog"></i> Setup</a>
                 <a href="#testing" class="nav-link"><i class="fas fa-flask"></i> Testing</a>
                 <a href="#findings" class="nav-link"><i class="fas fa-chart-line"></i> Findings</a>
@@ -96,6 +97,166 @@
                 <i class="fas fa-exclamation-triangle"></i>
                 <div>
                     <strong>Security Reminder:</strong> Even with VM isolation, treat this as a potentially hostile environment. Never use production credentials, personal data, or access to critical systems.
+                </div>
+            </div>
+        </section>
+
+        <!-- Cost Tracking Section -->
+        <section id="costs" class="section">
+            <h2 class="section-title"><i class="fas fa-dollar-sign"></i> Cost Tracking & Budget Controls</h2>
+            <p class="section-intro">Real-time monitoring and budget enforcement to prevent runaway costs. Reddit reports show users facing $300-500 bills from uncontrolled agents.</p>
+            
+            <div class="alert alert-info" style="margin-bottom: 2rem;">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>Phase 2a Feature:</strong> Cost tracking with budget limits, rate limiting, and real-time alerts. This addresses the #1 user pain point from Reddit community feedback.
+                </div>
+            </div>
+
+            <div class="grid-3">
+                <div class="card cost-card">
+                    <div class="card-icon cost-icon">
+                        <i class="fas fa-gauge-high"></i>
+                    </div>
+                    <h3>Session Budget</h3>
+                    <div class="cost-display">
+                        <div class="cost-value" id="session-cost">$0.00</div>
+                        <div class="cost-limit" id="session-limit">of $10.00</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="session-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="cost-detail">
+                            <span id="session-calls">0</span> API calls
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card cost-card">
+                    <div class="card-icon cost-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3>Hourly Budget</h3>
+                    <div class="cost-display">
+                        <div class="cost-value" id="hourly-cost">$0.00</div>
+                        <div class="cost-limit" id="hourly-limit">of $50.00</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="hourly-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="cost-detail">
+                            Resets in <span id="hourly-reset">60:00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card cost-card">
+                    <div class="card-icon cost-icon">
+                        <i class="fas fa-calendar-day"></i>
+                    </div>
+                    <h3>Daily Budget</h3>
+                    <div class="cost-display">
+                        <div class="cost-value" id="daily-cost">$0.00</div>
+                        <div class="cost-limit" id="daily-limit">of $200.00</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="daily-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="cost-detail">
+                            Resets in <span id="daily-reset">24:00:00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-2" style="margin-top: 2rem;">
+                <div class="card">
+                    <h3><i class="fas fa-tachometer-alt"></i> Rate Limiting</h3>
+                    <div class="rate-info">
+                        <div class="rate-stat">
+                            <span class="rate-label">Calls This Minute:</span>
+                            <span class="rate-value" id="rate-current">0</span>
+                            <span class="rate-max">/ <span id="rate-max">30</span></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="rate-progress" style="width: 0%"></div>
+                        </div>
+                        <div class="rate-detail">
+                            <span id="rate-remaining">30</span> calls remaining
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-coins"></i> Token Usage</h3>
+                    <div class="token-info">
+                        <div class="token-stat">
+                            <span class="token-label">Input Tokens:</span>
+                            <span class="token-value" id="tokens-input">0</span>
+                        </div>
+                        <div class="token-stat">
+                            <span class="token-label">Output Tokens:</span>
+                            <span class="token-value" id="tokens-output">0</span>
+                        </div>
+                        <div class="token-stat">
+                            <span class="token-label">Total:</span>
+                            <span class="token-value" id="tokens-total">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-chart-line"></i> Projections & Analytics</h3>
+                <div class="projection-grid">
+                    <div class="projection-item">
+                        <div class="projection-label">Avg Cost/Call</div>
+                        <div class="projection-value" id="proj-avg-cost">$0.00</div>
+                    </div>
+                    <div class="projection-item">
+                        <div class="projection-label">Cost/Hour</div>
+                        <div class="projection-value" id="proj-cost-hour">$0.00</div>
+                    </div>
+                    <div class="projection-item">
+                        <div class="projection-label">Remaining Hours</div>
+                        <div class="projection-value" id="proj-remaining-hours">∞</div>
+                    </div>
+                    <div class="projection-item">
+                        <div class="projection-label">Estimated Total</div>
+                        <div class="projection-value" id="proj-estimated-total">$0.00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <div class="cost-controls-header">
+                    <h3><i class="fas fa-bell"></i> Recent Alerts</h3>
+                    <button class="btn btn-secondary btn-small" onclick="refreshCostData()">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+                <div id="cost-alerts" class="cost-alerts">
+                    <div class="empty-state">
+                        <i class="fas fa-check-circle"></i>
+                        <p>No alerts. Budget is healthy.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 2rem;">
+                <h3><i class="fas fa-sliders-h"></i> Budget Configuration</h3>
+                <div class="config-info">
+                    <p>Current budget limits are configured via environment variables in <code>.env</code>:</p>
+                    <div class="code-block">
+                        <pre><code># Cost Control Settings
+MAX_COST_PER_SESSION_USD=10.00
+MAX_COST_PER_HOUR_USD=50.00
+MAX_COST_PER_DAY_USD=200.00
+MAX_API_CALLS_PER_MINUTE=30
+MAX_TOKENS_PER_REQUEST=8000
+ALERT_AT_PERCENT=80.0</code></pre>
+                    </div>
+                    <p style="margin-top: 1rem;">
+                        <strong>Note:</strong> Restart the cost-tracker service after changing these values:
+                        <code>docker-compose restart cost-tracker</code>
+                    </p>
                 </div>
             </div>
         </section>

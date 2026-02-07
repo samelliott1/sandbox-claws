@@ -4,21 +4,28 @@
 
 > Docker + Test Harness + Firewall for AI Agents
 
-🔥 **NEW: Phase 1 Security Features** - [Read the security research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
+🔥 **NEW: Phase 2a Cost Controls** - [Read the cost controls guide →](docs/security/COST_CONTROLS.md)
+- ✅ **Budget Enforcement** - Session, hourly, and daily limits
+- ✅ **Real-Time Tracking** - Live cost dashboard with 5s refresh
+- ✅ **Rate Limiting** - 30 calls/minute default (configurable)
+- ✅ **Token Counting** - Accurate cost estimation with tiktoken
+- ✅ **Automatic Alerts** - Warnings at 80% budget threshold
+
+**Phase 1 Security Features** - [Read the security research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
 - ✅ **Skill Marketplace Scanner** - Detect malicious ClawHub skills
 - ✅ **Remote Markdown Blocker** - Prevent heartbeat.md RCE attacks  
 - ✅ **Credential Isolation** - Block access to ~/.ssh/, ~/.aws/
 - ✅ **Filesystem Monitor** - Real-time credential theft detection
 
-[📖 Phase 1 Documentation →](docs/security/PHASE_1_SECURITY.md)
+[📖 Phase 1 Documentation →](docs/security/PHASE_1_SECURITY.md) | [📖 Cost Controls Documentation →](docs/security/COST_CONTROLS.md)
 
 ## The Problem
 
 Standard container sandboxes isolate compute but not network traffic. An AI agent in a typical Docker container can still exfiltrate sensitive data to arbitrary external servers.
 
-**Recent AI Agent Security Incidents (Feb 2026):** Hundreds of malicious skills on marketplaces, #1 skill was backdoored, enterprise networks infected. [Full research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
+**Recent AI Agent Security Incidents (Feb 2026):** Hundreds of malicious skills on marketplaces, #1 skill was backdoored, enterprise networks infected, users reporting $300-500 bills from runaway agents. [Full research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
 
-Sandbox Claws adds enforceable egress controls, air-gapped execution, automated DLP scanning, **and now Phase 1 security features** so you can test agents safely—even with sensitive data.
+Sandbox Claws adds enforceable egress controls, air-gapped execution, automated DLP scanning, **Phase 1 security features, and Phase 2a cost controls** so you can test agents safely—even with sensitive data—without surprise bills.
 
 ## Architecture
 

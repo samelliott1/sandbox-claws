@@ -547,3 +547,277 @@ console.log('OpenClaw Testing Hub loaded successfully');
 console.log('Keyboard shortcuts:');
 console.log('- Ctrl/Cmd + K: Add new finding');
 console.log('- Escape: Close modal');
+// =============================================================================
+// COST TRACKING FUNCTIONALITY (Phase 2a)
+// =============================================================================
+
+// Cost Tracker API Base URL
+const COST_TRACKER_URL = window.location.hostname === 'localhost' 
+    ? 'http://localhost:5003' 
+    : `http://${window.location.hostname}:5003`;
+
+// Auto-refresh cost data
+let costRefreshInterval = null;
+
+// Initialize cost tracking when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if cost tracker is available
+    checkCostTrackerHealth();
+    
+    // Start auto-refresh (every 5 seconds)
+    startCostAutoRefresh();
+});
+
+async function checkCostTrackerHealth() {
+    try {
+        const response = await fetch(`${COST_TRACKER_URL}/health`);
+        if (response.ok) {
+            console.log('✅ Cost Tracker connected');
+            refreshCostData();
+        } else {
+            console.warn('⚠️ Cost Tracker unhealthy');
+            showCostTrackerOffline();
+        }
+    } catch (error) {
+        console.warn('⚠️ Cost Tracker not available:', error.message);
+        showCostTrackerOffline();
+    }
+}
+
+function showCostTrackerOffline() {
+    const alertsDiv = document.getElementById('cost-alerts');
+    if (alertsDiv) {
+        alertsDiv.innerHTML = `
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <div>
+                    <strong>Cost Tracker Offline</strong><br>
+                    The cost tracking service is not running. Start it with:<br>
+                    <code>docker-compose up -d cost-tracker</code>
+                </div>
+            </div>
+        `;
+    }
+}
+
+async function refreshCostData() {
+    try {
+        // Fetch current statistics
+        const statsResponse = await fetch(`${COST_TRACKER_URL}/stats`);
+        if (!statsResponse.ok) {
+            throw new Error('Failed to fetch stats');
+        }
+        
+        const stats = await statsResponse.json();
+        updateCostDisplay(stats);
+        
+        // Fetch alerts
+        const alertsResponse = await fetch(`${COST_TRACKER_URL}/alerts`);
+        if (alertsResponse.ok) {
+            const alertsData = await alertsResponse.json();
+            updateAlertsDisplay(alertsData.alerts);
+        }
+        
+    } catch (error) {
+        console.error('Error refreshing cost data:', error);
+    }
+}
+
+function updateCostDisplay(stats) {
+    // Session Budget
+    updateBudgetCard('session', stats.session);
+    
+    // Hourly Budget
+    updateBudgetCard('hourly', stats.hourly);
+    
+    // Daily Budget
+    updateBudgetCard('daily', stats.daily);
+    
+    // Rate Limiting
+    updateRateLimitDisplay(stats.rate);
+    
+    // Token Usage
+    updateTokenDisplay(stats.tokens);
+    
+    // Projections
+    updateProjections(stats);
+}
+
+function updateBudgetCard(type, data) {
+    // Update cost value
+    const costEl = document.getElementById(`${type}-cost`);
+    if (costEl) {
+        costEl.textContent = `$${data.cost.toFixed(2)}`;
+        
+        // Color code based on percentage
+        if (data.percent >= 90) {
+            costEl.style.color = '#e74c3c';
+        } else if (data.percent >= 80) {
+            costEl.style.color = '#f39c12';
+        } else {
+            costEl.style.color = '#2ecc71';
+        }
+    }
+    
+    // Update limit
+    const limitEl = document.getElementById(`${type}-limit`);
+    if (limitEl) {
+        limitEl.textContent = `of $${data.budget.toFixed(2)}`;
+    }
+    
+    // Update progress bar
+    const progressEl = document.getElementById(`${type}-progress`);
+    if (progressEl) {
+        progressEl.style.width = `${Math.min(data.percent, 100)}%`;
+        
+        // Color code progress bar
+        if (data.percent >= 90) {
+            progressEl.style.backgroundColor = '#e74c3c';
+        } else if (data.percent >= 80) {
+            progressEl.style.backgroundColor = '#f39c12';
+        } else {
+            progressEl.style.backgroundColor = '#2ecc71';
+        }
+    }
+    
+    // Update session calls (if applicable)
+    if (type === 'session') {
+        const callsEl = document.getElementById('session-calls');
+        if (callsEl) {
+            callsEl.textContent = data.calls || 0;
+        }
+    }
+}
+
+function updateRateLimitDisplay(rateData) {
+    const currentEl = document.getElementById('rate-current');
+    if (currentEl) {
+        currentEl.textContent = rateData.calls_this_minute || 0;
+    }
+    
+    const maxEl = document.getElementById('rate-max');
+    if (maxEl) {
+        maxEl.textContent = rateData.max_per_minute || 30;
+    }
+    
+    const remainingEl = document.getElementById('rate-remaining');
+    if (remainingEl) {
+        const remaining = rateData.max_per_minute - rateData.calls_this_minute;
+        remainingEl.textContent = remaining;
+    }
+    
+    const progressEl = document.getElementById('rate-progress');
+    if (progressEl) {
+        const percent = (rateData.calls_this_minute / rateData.max_per_minute) * 100;
+        progressEl.style.width = `${Math.min(percent, 100)}%`;
+        
+        if (percent >= 90) {
+            progressEl.style.backgroundColor = '#e74c3c';
+        } else if (percent >= 80) {
+            progressEl.style.backgroundColor = '#f39c12';
+        } else {
+            progressEl.style.backgroundColor = '#3498db';
+        }
+    }
+}
+
+function updateTokenDisplay(tokenData) {
+    const inputEl = document.getElementById('tokens-input');
+    if (inputEl) {
+        inputEl.textContent = (tokenData.input || 0).toLocaleString();
+    }
+    
+    const outputEl = document.getElementById('tokens-output');
+    if (outputEl) {
+        outputEl.textContent = (tokenData.output || 0).toLocaleString();
+    }
+    
+    const totalEl = document.getElementById('tokens-total');
+    if (totalEl) {
+        totalEl.textContent = (tokenData.total || 0).toLocaleString();
+    }
+}
+
+function updateProjections(stats) {
+    const avgCostEl = document.getElementById('proj-avg-cost');
+    if (avgCostEl && stats.session) {
+        avgCostEl.textContent = `$${stats.session.avg_cost_per_call.toFixed(4)}`;
+    }
+    
+    const costHourEl = document.getElementById('proj-cost-hour');
+    if (costHourEl && stats.rate) {
+        costHourEl.textContent = `$${stats.rate.cost_per_hour.toFixed(2)}`;
+    }
+    
+    const remainingHoursEl = document.getElementById('proj-remaining-hours');
+    if (remainingHoursEl && stats.projections) {
+        const hours = stats.projections.remaining_hours_at_current_rate;
+        if (hours === Infinity || hours > 1000) {
+            remainingHoursEl.textContent = '∞';
+        } else {
+            remainingHoursEl.textContent = hours.toFixed(1);
+        }
+    }
+    
+    const estimatedTotalEl = document.getElementById('proj-estimated-total');
+    if (estimatedTotalEl && stats.projections) {
+        estimatedTotalEl.textContent = `$${stats.projections.estimated_total_if_continues.toFixed(2)}`;
+    }
+}
+
+function updateAlertsDisplay(alerts) {
+    const alertsDiv = document.getElementById('cost-alerts');
+    if (!alertsDiv) return;
+    
+    if (!alerts || alerts.length === 0) {
+        alertsDiv.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-check-circle"></i>
+                <p>No alerts. Budget is healthy.</p>
+            </div>
+        `;
+        return;
+    }
+    
+    // Show most recent alerts (max 5)
+    const recentAlerts = alerts.slice(-5).reverse();
+    
+    alertsDiv.innerHTML = recentAlerts.map(alert => {
+        const time = new Date(alert.timestamp).toLocaleTimeString();
+        return `
+            <div class="cost-alert ${alert.type}">
+                <div class="alert-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="alert-content">
+                    <div class="alert-message">${alert.message}</div>
+                    <div class="alert-time">${time}</div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function startCostAutoRefresh() {
+    // Clear any existing interval
+    if (costRefreshInterval) {
+        clearInterval(costRefreshInterval);
+    }
+    
+    // Refresh every 5 seconds
+    costRefreshInterval = setInterval(() => {
+        refreshCostData();
+    }, 5000);
+}
+
+// Manual refresh button
+window.refreshCostData = refreshCostData;
+
+// Cleanup on page unload
+window.addEventListener('beforeunload', () => {
+    if (costRefreshInterval) {
+        clearInterval(costRefreshInterval);
+    }
+});
+
+console.log('💰 Cost tracking module loaded');
