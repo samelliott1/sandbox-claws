@@ -1,0 +1,168 @@
+{
+  "ssh_keys": [
+    {
+      "pattern": "/.ssh/id_rsa",
+      "severity": "CRITICAL",
+      "description": "SSH private key access",
+      "action": "BLOCK"
+    },
+    {
+      "pattern": "/.ssh/id_ed25519",
+      "severity": "CRITICAL",
+      "description": "SSH ED25519 private key access",
+      "action": "BLOCK"
+    },
+    {
+      "pattern": "/.ssh/id_ecdsa",
+      "severity": "CRITICAL",
+      "description": "SSH ECDSA private key access",
+      "action": "BLOCK"
+    },
+    {
+      "pattern": "/.ssh/config",
+      "severity": "HIGH",
+      "description": "SSH config file access",
+      "action": "ALERT"
+    },
+    {
+      "pattern": "/.ssh/known_hosts",
+      "severity": "MEDIUM",
+      "description": "SSH known hosts access",
+      "action": "ALERT"
+    }
+  ],
+  "aws_credentials": [
+    {
+      "pattern": "/.aws/credentials",
+      "severity": "CRITICAL",
+      "description": "AWS credentials file access",
+      "action": "BLOCK"
+    },
+    {
+      "pattern": "/.aws/config",
+      "severity": "HIGH",
+      "description": "AWS config file access",
+      "action": "ALERT"
+    }
+  ],
+  "openclaw_config": [
+    {
+      "pattern": "/.openclaw/config.json",
+      "severity": "CRITICAL",
+      "description": "OpenClaw config with all API keys",
+      "action": "BLOCK"
+    },
+    {
+      "pattern": "/.openclaw/agents/.*/config.yml",
+      "severity": "CRITICAL",
+      "description": "OpenClaw agent config",
+      "action": "BLOCK"
+    },
+    {
+      "pattern": "/.openclaw/.*\\.db",
+      "severity": "HIGH",
+      "description": "OpenClaw database access",
+      "action": "ALERT"
+    }
+  ],
+  "docker_credentials": [
+    {
+      "pattern": "/.docker/config.json",
+      "severity": "CRITICAL",
+      "description": "Docker registry credentials",
+      "action": "BLOCK"
+    }
+  ],
+  "kubernetes_config": [
+    {
+      "pattern": "/.kube/config",
+      "severity": "CRITICAL",
+      "description": "Kubernetes cluster credentials",
+      "action": "BLOCK"
+    }
+  ],
+  "git_credentials": [
+    {
+      "pattern": "/.gitconfig",
+      "severity": "MEDIUM",
+      "description": "Git configuration (may contain credentials)",
+      "action": "ALERT"
+    },
+    {
+      "pattern": "/.git-credentials",
+      "severity": "CRITICAL",
+      "description": "Git stored credentials",
+      "action": "BLOCK"
+    }
+  ],
+  "system_files": [
+    {
+      "pattern": "/etc/passwd",
+      "severity": "HIGH",
+      "description": "System password file",
+      "action": "ALERT"
+    },
+    {
+      "pattern": "/etc/shadow",
+      "severity": "CRITICAL",
+      "description": "Shadow password file (hashed passwords)",
+      "action": "BLOCK"
+    },
+    {
+      "pattern": "/etc/sudoers",
+      "severity": "CRITICAL",
+      "description": "Sudoers configuration",
+      "action": "BLOCK"
+    }
+  ],
+  "browser_data": [
+    {
+      "pattern": "/.mozilla/firefox/.*/cookies.sqlite",
+      "severity": "HIGH",
+      "description": "Firefox cookies database",
+      "action": "ALERT"
+    },
+    {
+      "pattern": "/.config/google-chrome/.*/Cookies",
+      "severity": "HIGH",
+      "description": "Chrome cookies",
+      "action": "ALERT"
+    },
+    {
+      "pattern": "/.config/google-chrome/.*/Login Data",
+      "severity": "CRITICAL",
+      "description": "Chrome saved passwords",
+      "action": "BLOCK"
+    }
+  ],
+  "environment_files": [
+    {
+      "pattern": "/\\.env",
+      "severity": "HIGH",
+      "description": "Environment file (may contain secrets)",
+      "action": "ALERT"
+    },
+    {
+      "pattern": "/\\.env\\..*",
+      "severity": "HIGH",
+      "description": "Environment file variant",
+      "action": "ALERT"
+    }
+  ],
+  "npm_credentials": [
+    {
+      "pattern": "/.npmrc",
+      "severity": "HIGH",
+      "description": "NPM credentials and registry config",
+      "action": "ALERT"
+    }
+  ],
+  "python_credentials": [
+    {
+      "pattern": "/.pypirc",
+      "severity": "HIGH",
+      "description": "PyPI credentials",
+      "action": "ALERT"
+    }
+  ]
+}

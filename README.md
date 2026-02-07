@@ -4,11 +4,21 @@
 
 > Docker + Test Harness + Firewall for AI Agents
 
+🔥 **NEW: Phase 1 Security Features** - [Read about the OpenClaw crisis →](OPENCLAW_SECURITY_ANALYSIS.md)
+- ✅ **Skill Marketplace Scanner** - Detect malicious ClawHub skills
+- ✅ **Remote Markdown Blocker** - Prevent heartbeat.md RCE attacks  
+- ✅ **Credential Isolation** - Block access to ~/.ssh/, ~/.aws/
+- ✅ **Filesystem Monitor** - Real-time credential theft detection
+
+[📖 Phase 1 Documentation →](PHASE_1_SECURITY.md)
+
 ## The Problem
 
 Standard container sandboxes isolate compute but not network traffic. An AI agent in a typical Docker container can still exfiltrate sensitive data to arbitrary external servers.
 
-Sandbox Claws adds enforceable egress controls, air-gapped execution, and automated DLP scanning so you can test agents safely—even with sensitive data.
+**Recent OpenClaw Crisis (Feb 2026):** Hundreds of malicious skills on ClawHub, #1 skill was backdoored, enterprise networks infected. [Full analysis →](OPENCLAW_SECURITY_ANALYSIS.md)
+
+Sandbox Claws adds enforceable egress controls, air-gapped execution, automated DLP scanning, **and now Phase 1 security features** so you can test agents safely—even with sensitive data.
 
 ## Architecture
 

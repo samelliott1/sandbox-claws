@@ -116,4 +116,4 @@ sample-data/
 
 # Generated documentation
 docs/_build/
-site/
+site/secrets/

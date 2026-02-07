@@ -193,6 +193,63 @@ services:
       - "com.sandbox-claws.component=security"
       - "com.sandbox-claws.security-control=dlp"
 
+  # ===== PHASE 1 SECURITY SERVICES =====
+  
+  # Skill Marketplace Scanner (NEW)
+  skill-scanner:
+    build:
+      context: ./docker/skill-scanner
+      dockerfile: Dockerfile
+    container_name: sandbox-claws-skill-scanner
+    ports:
+      - "${SCANNER_PORT:-5001}:5001"
+    environment:
+      - SKILLS_DIR=/skills
+      - SCANNER_PORT=5001
+    volumes:
+      - ./skills:/skills:ro
+      - ./docker/skill-scanner/scan-results:/app/scan-results
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    profiles:
+      - basic
+      - filtered
+      - secure
+    labels:
+      - "com.sandbox-claws.component=security"
+      - "com.sandbox-claws.security-control=skill-scanner"
+      - "com.sandbox-claws.phase=1"
+
+  # Filesystem Monitor (NEW)
+  filesystem-monitor:
+    build:
+      context: ./docker/filesystem-monitor
+      dockerfile: Dockerfile
+    container_name: sandbox-claws-fsmonitor
+    ports:
+      - "${FSMONITOR_PORT:-5002}:5002"
+    environment:
+      - SCAN_INTERVAL=5
+      - MONITOR_PORT=5002
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - sandbox-claws
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE  # Required for process monitoring
+    profiles:
+      - basic
+      - filtered
+      - secure
+    labels:
+      - "com.sandbox-claws.component=security"
+      - "com.sandbox-claws.security-control=filesystem-monitor"
+      - "com.sandbox-claws.phase=1"
+  
+  # ===== END PHASE 1 SECURITY SERVICES =====
+
   # Monitoring and logging with Dozzle
   logs:
     image: amir20/dozzle:latest
@@ -266,3 +323,11 @@ volumes:
     driver: local
   squid-logs:
     driver: local
+
+# ===== PHASE 1: CREDENTIAL ISOLATION =====
+# Secrets are mounted as read-only files (NOT as host volume mounts)
+# This prevents OpenClaw from accessing ~/.ssh/, ~/.aws/, etc.
+secrets:
+  openclaw_api_keys:
+    file: ./secrets/api_keys.txt
+# ===== END PHASE 1 =====

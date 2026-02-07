@@ -1,0 +1,310 @@
+{
+  "credential_access": [
+    {
+      "pattern": "\\.openclaw/config\\.json",
+      "severity": "CRITICAL",
+      "description": "Accessing OpenClaw config file containing all API keys"
+    },
+    {
+      "pattern": "~/?\\.ssh/",
+      "severity": "CRITICAL",
+      "description": "Accessing SSH keys directory"
+    },
+    {
+      "pattern": "~/?\\.aws/credentials",
+      "severity": "CRITICAL",
+      "description": "Accessing AWS credentials file"
+    },
+    {
+      "pattern": "~/?\\.docker/config\\.json",
+      "severity": "CRITICAL",
+      "description": "Accessing Docker registry credentials"
+    },
+    {
+      "pattern": "~/?\\.kube/config",
+      "severity": "CRITICAL",
+      "description": "Accessing Kubernetes config with cluster credentials"
+    },
+    {
+      "pattern": "~/?\\.gitconfig",
+      "severity": "HIGH",
+      "description": "Accessing git config (may contain credentials)"
+    },
+    {
+      "pattern": "/etc/passwd",
+      "severity": "HIGH",
+      "description": "Reading system password file"
+    },
+    {
+      "pattern": "/etc/shadow",
+      "severity": "CRITICAL",
+      "description": "Accessing shadow password file"
+    },
+    {
+      "pattern": "ANTHROPIC_API_KEY|OPENAI_API_KEY|GEMINI_API_KEY",
+      "severity": "HIGH",
+      "description": "Accessing AI model API keys"
+    },
+    {
+      "pattern": "AWS_ACCESS_KEY_ID|AWS_SECRET_ACCESS_KEY",
+      "severity": "CRITICAL",
+      "description": "Accessing AWS credentials"
+    },
+    {
+      "pattern": "GITHUB_TOKEN|GITLAB_TOKEN",
+      "severity": "HIGH",
+      "description": "Accessing code repository tokens"
+    }
+  ],
+  "exfiltration": [
+    {
+      "pattern": "curl.*pastebin",
+      "severity": "CRITICAL",
+      "description": "Exfiltration via Pastebin"
+    },
+    {
+      "pattern": "wget.*pastebin",
+      "severity": "CRITICAL",
+      "description": "Exfiltration via Pastebin"
+    },
+    {
+      "pattern": "curl.*github\\.com/gist",
+      "severity": "CRITICAL",
+      "description": "Exfiltration via GitHub Gist"
+    },
+    {
+      "pattern": "curl.*privatebin",
+      "severity": "CRITICAL",
+      "description": "Exfiltration via PrivateBin"
+    },
+    {
+      "pattern": "curl.*ix\\.io",
+      "severity": "CRITICAL",
+      "description": "Exfiltration via ix.io"
+    },
+    {
+      "pattern": "base64.*\\|.*curl",
+      "severity": "CRITICAL",
+      "description": "Base64 encoding before upload (data exfiltration)"
+    },
+    {
+      "pattern": "openssl.*enc.*\\|.*curl",
+      "severity": "CRITICAL",
+      "description": "Encrypting data before exfiltration"
+    },
+    {
+      "pattern": "tar.*\\|.*curl.*-T",
+      "severity": "HIGH",
+      "description": "Compressing and uploading data"
+    },
+    {
+      "pattern": "nc.*-l.*-p.*>",
+      "severity": "CRITICAL",
+      "description": "Network exfiltration via netcat"
+    },
+    {
+      "pattern": "python.*-m.*http\\.server",
+      "severity": "MEDIUM",
+      "description": "Starting HTTP server (potential data exposure)"
+    }
+  ],
+  "destructive": [
+    {
+      "pattern": "rm\\s+-rf\\s+(/|~/|\\$HOME)",
+      "severity": "CRITICAL",
+      "description": "Recursive deletion of important directories"
+    },
+    {
+      "pattern": "DROP\\s+DATABASE",
+      "severity": "CRITICAL",
+      "description": "Dropping database"
+    },
+    {
+      "pattern": "DROP\\s+TABLE",
+      "severity": "HIGH",
+      "description": "Dropping database table"
+    },
+    {
+      "pattern": "DELETE\\s+FROM.*WHERE\\s+1=1",
+      "severity": "CRITICAL",
+      "description": "Deleting all rows from table"
+    },
+    {
+      "pattern": "mkfs\\.",
+      "severity": "CRITICAL",
+      "description": "Formatting filesystem"
+    },
+    {
+      "pattern": "dd\\s+if=/dev/zero\\s+of=",
+      "severity": "CRITICAL",
+      "description": "Overwriting disk with zeros"
+    },
+    {
+      "pattern": ":\\(\\){:\\|:\\&};:",
+      "severity": "CRITICAL",
+      "description": "Fork bomb attack"
+    },
+    {
+      "pattern": "chmod\\s+-R\\s+777",
+      "severity": "HIGH",
+      "description": "Setting world-writable permissions"
+    }
+  ],
+  "obfuscation": [
+    {
+      "pattern": "eval\\(",
+      "severity": "HIGH",
+      "description": "Using eval (code execution)"
+    },
+    {
+      "pattern": "exec\\(",
+      "severity": "HIGH",
+      "description": "Using exec (code execution)"
+    },
+    {
+      "pattern": "__import__\\(",
+      "severity": "HIGH",
+      "description": "Dynamic import (obfuscation technique)"
+    },
+    {
+      "pattern": "compile\\(.*exec",
+      "severity": "HIGH",
+      "description": "Compiling and executing code"
+    },
+    {
+      "pattern": "\\$\\(.*base64.*-d",
+      "severity": "HIGH",
+      "description": "Base64 decoding and execution"
+    },
+    {
+      "pattern": "echo.*\\|.*sh",
+      "severity": "HIGH",
+      "description": "Piping code to shell"
+    },
+    {
+      "pattern": "curl.*\\|.*bash",
+      "severity": "CRITICAL",
+      "description": "Downloading and executing remote script"
+    },
+    {
+      "pattern": "wget.*\\|.*sh",
+      "severity": "CRITICAL",
+      "description": "Downloading and executing remote script"
+    },
+    {
+      "pattern": "\\\\x[0-9a-f]{2}",
+      "severity": "MEDIUM",
+      "description": "Hex-encoded strings (obfuscation)"
+    },
+    {
+      "pattern": "String\\.fromCharCode",
+      "severity": "MEDIUM",
+      "description": "Character code obfuscation (JavaScript)"
+    }
+  ],
+  "remote_fetching": [
+    {
+      "pattern": "moltbook\\.com",
+      "severity": "CRITICAL",
+      "description": "Fetching instructions from moltbook.com (heartbeat.md vulnerability)"
+    },
+    {
+      "pattern": "clawhub\\.com",
+      "severity": "HIGH",
+      "description": "Fetching from ClawHub (potentially compromised)"
+    },
+    {
+      "pattern": "https?://.*\\.md",
+      "severity": "HIGH",
+      "description": "Fetching remote markdown file (potential RCE)"
+    },
+    {
+      "pattern": "curl.*https?://.*skill",
+      "severity": "MEDIUM",
+      "description": "Fetching remote skill definition"
+    },
+    {
+      "pattern": "wget.*https?://.*skill",
+      "severity": "MEDIUM",
+      "description": "Fetching remote skill definition"
+    }
+  ],
+  "crypto_mining": [
+    {
+      "pattern": "xmrig|minergate|cpuminer",
+      "severity": "CRITICAL",
+      "description": "Cryptocurrency mining software"
+    },
+    {
+      "pattern": "stratum\\+tcp://",
+      "severity": "CRITICAL",
+      "description": "Mining pool connection"
+    },
+    {
+      "pattern": "--donate-level",
+      "severity": "HIGH",
+      "description": "Crypto miner configuration"
+    }
+  ],
+  "reverse_shell": [
+    {
+      "pattern": "bash\\s+-i.*>&\\s*/dev/tcp/",
+      "severity": "CRITICAL",
+      "description": "Bash reverse shell"
+    },
+    {
+      "pattern": "python.*socket.*connect",
+      "severity": "HIGH",
+      "description": "Python reverse shell"
+    },
+    {
+      "pattern": "nc.*-e\\s+/bin/(ba)?sh",
+      "severity": "CRITICAL",
+      "description": "Netcat reverse shell"
+    },
+    {
+      "pattern": "perl.*Socket.*connect",
+      "severity": "HIGH",
+      "description": "Perl reverse shell"
+    }
+  ],
+  "suspicious_network": [
+    {
+      "pattern": "0\\.0\\.0\\.0",
+      "severity": "MEDIUM",
+      "description": "Binding to all interfaces"
+    },
+    {
+      "pattern": "127\\.0\\.0\\.1:\\d{4,5}",
+      "severity": "LOW",
+      "description": "Local network binding"
+    },
+    {
+      "pattern": ":[0-9]{4,5}\\s*>",
+      "severity": "MEDIUM",
+      "description": "Network listener setup"
+    }
+  ],
+  "privilege_escalation": [
+    {
+      "pattern": "sudo\\s+",
+      "severity": "HIGH",
+      "description": "Attempting to use sudo"
+    },
+    {
+      "pattern": "su\\s+-",
+      "severity": "HIGH",
+      "description": "Attempting to switch user"
+    },
+    {
+      "pattern": "/etc/sudoers",
+      "severity": "CRITICAL",
+      "description": "Accessing sudoers file"
+    },
+    {
+      "pattern": "SUID|setuid",
+      "severity": "HIGH",
+      "description": "SUID bit manipulation"
+    }
+  ]
+}
