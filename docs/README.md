@@ -13,12 +13,12 @@ Complete documentation for the Sandbox Claws secure AI agent testing framework.
 
 ## 🔐 Security Features
 
-- **[Phase 2a: Cost Controls](security/COST_CONTROLS.md)** 🔥 NEW - Budget enforcement & rate limiting
+- **[Cost Controls](security/COST_CONTROLS.md)** 🔥 NEW - Budget enforcement & rate limiting
   - Session, hourly, and daily budget limits
   - Real-time cost tracking dashboard
   - Automatic alerts at 80% budget threshold
   - Rate limiting to prevent runaway agents
-- **[Phase 1 Security Features](security/PHASE_1_SECURITY.md)** - Core security enhancements
+- **[Advanced Security Features](security/ADVANCED_SECURITY.md)** - Core security enhancements
   - Skill Marketplace Scanner
   - Remote Markdown Blocker
   - Credential Isolation
@@ -48,7 +48,7 @@ Complete documentation for the Sandbox Claws secure AI agent testing framework.
 ## 📊 Analysis & Research
 
 - **[AI Agent Security Research](analysis/AI_AGENT_SECURITY_RESEARCH.md)** - Industry security lessons
-- **[Product Roadmap](ROADMAP.md)** - Future enhancements (Phases 1-3)
+- **[Product Roadmap](ROADMAP.md)** - Future enhancements
 
 ---
 
@@ -70,8 +70,8 @@ docs/
 │   ├── PROXMOX.md                      ← Proxmox LXC
 │   └── GITHUB_INTEGRATION_GUIDE.md     ← CI/CD setup
 ├── security/
-│   ├── COST_CONTROLS.md                ← Phase 2a: Budget enforcement 🔥 NEW
-│   ├── PHASE_1_SECURITY.md             ← Phase 1 security features
+│   ├── COST_CONTROLS.md                ← Budget enforcement 🔥 NEW
+│   ├── ADVANCED_SECURITY.md            ← Advanced security features
 │   ├── SECURITY_DEPLOYMENT.md          ← Hardening guide
 │   └── DATA_EXFILTRATION.md            ← Threat model
 ├── testing/
@@ -99,7 +99,7 @@ docs/
 | **Secure deployment** | [SECURITY_DEPLOYMENT.md](SECURITY_DEPLOYMENT.md) |
 | **Test agents** | [TESTING_GUIDE.md](TESTING_GUIDE.md) |
 | **Cost controls** 🔥 | [COST_CONTROLS.md](security/COST_CONTROLS.md) |
-| **Phase 1 features** | [PHASE_1_SECURITY.md](security/PHASE_1_SECURITY.md) |
+| **Security features** | [ADVANCED_SECURITY.md](security/ADVANCED_SECURITY.md) |
 | **Uninstall** | [UNINSTALL_GUIDE.md](../UNINSTALL_GUIDE.md) |
 | **Contribute** | [CONTRIBUTING.md](../CONTRIBUTING.md) |
 

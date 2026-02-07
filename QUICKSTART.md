@@ -29,10 +29,10 @@ cd agent-sandbox
 
 ```bash
 # Make script executable
-chmod +x deploy.sh
+chmod +x deploy-sandbox-claws.sh
 
 # Run automated deployment
-./deploy.sh
+./deploy-sandbox-claws.sh
 ```
 
 The script will:

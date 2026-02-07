@@ -2,7 +2,7 @@
 
 ## What Was Added
 
-A comprehensive `uninstall.sh` script that safely removes all Sandbox Claws components with interactive prompts.
+A comprehensive `uninstall-sandbox-claws.sh` script that safely removes all Sandbox Claws components with interactive prompts.
 
 ## Features
 
@@ -42,16 +42,16 @@ Works on:
 git pull origin main
 
 # Make executable
-chmod +x uninstall.sh
+chmod +x uninstall-sandbox-claws.sh
 
 # Run uninstall
-./uninstall.sh
+./uninstall-sandbox-claws.sh
 ```
 
 ### Example Uninstall Flow
 
 ```bash
-$ ./uninstall.sh
+$ ./uninstall-sandbox-claws.sh
 
 ============================================
     Sandbox Claws - Uninstall
@@ -147,7 +147,7 @@ cd sandbox-claws
 ./deploy.sh airgapped    # Air-gapped profile
 
 # Uninstall
-./uninstall.sh           # Interactive uninstall
+./uninstall-sandbox-claws.sh           # Interactive uninstall
 
 # Management
 docker compose ps        # Check status

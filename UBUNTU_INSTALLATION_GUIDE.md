@@ -253,10 +253,10 @@ git clone https://github.com/samelliott1/sandbox-claws.git
 cd sandbox-claws
 
 # Make deploy script executable
-chmod +x deploy.sh
+chmod +x deploy-sandbox-claws.sh
 
 # Deploy Sandbox Claws (with cost tracking)
-./deploy.sh filtered
+./deploy-sandbox-claws.sh filtered
 
 # Wait 2-3 minutes for all services to start
 ```
@@ -425,7 +425,7 @@ docker compose up -d
 
 ---
 
-## 🧪 Testing Phase 2a Cost Controls
+## 🧪 Testing Cost Controls
 
 Once Ubuntu and Sandbox Claws are running:
 
@@ -634,7 +634,7 @@ You'll know everything is working when:
 2. **Test Cost Controls:** Run `./scripts/test-cost-controls.sh`
 3. **Monitor Performance:** Compare Docker performance vs macOS
 4. **Provide Feedback:** Let me know what works/doesn't work
-5. **Plan Phase 2b:** Decide if we should build Context Management next
+5. **Next Steps:** Decide what to build next based on testing feedback
 
 ---
 

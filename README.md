@@ -4,20 +4,20 @@
 
 > Docker + Test Harness + Firewall for AI Agents
 
-🔥 **NEW: Phase 2a Cost Controls** - [Read the cost controls guide →](docs/security/COST_CONTROLS.md)
+🔥 **NEW: Cost Controls & Budget Enforcement** - [Read the cost controls guide →](docs/security/COST_CONTROLS.md)
 - ✅ **Budget Enforcement** - Session, hourly, and daily limits
 - ✅ **Real-Time Tracking** - Live cost dashboard with 5s refresh
 - ✅ **Rate Limiting** - 30 calls/minute default (configurable)
 - ✅ **Token Counting** - Accurate cost estimation with tiktoken
 - ✅ **Automatic Alerts** - Warnings at 80% budget threshold
 
-**Phase 1 Security Features** - [Read the security research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
+**Advanced Security Features** - [Read the security research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
 - ✅ **Skill Marketplace Scanner** - Detect malicious ClawHub skills
 - ✅ **Remote Markdown Blocker** - Prevent heartbeat.md RCE attacks  
 - ✅ **Credential Isolation** - Block access to ~/.ssh/, ~/.aws/
 - ✅ **Filesystem Monitor** - Real-time credential theft detection
 
-[📖 Phase 1 Documentation →](docs/security/PHASE_1_SECURITY.md) | [📖 Cost Controls Documentation →](docs/security/COST_CONTROLS.md)
+[📖 Security Features Documentation →](docs/security/ADVANCED_SECURITY.md) | [📖 Cost Controls Documentation →](docs/security/COST_CONTROLS.md)
 
 ## The Problem
 
@@ -25,7 +25,7 @@ Standard container sandboxes isolate compute but not network traffic. An AI agen
 
 **Recent AI Agent Security Incidents (Feb 2026):** Hundreds of malicious skills on marketplaces, #1 skill was backdoored, enterprise networks infected, users reporting $300-500 bills from runaway agents. [Full research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
 
-Sandbox Claws adds enforceable egress controls, air-gapped execution, automated DLP scanning, **Phase 1 security features, and Phase 2a cost controls** so you can test agents safely—even with sensitive data—without surprise bills.
+Sandbox Claws adds enforceable egress controls, air-gapped execution, automated DLP scanning, advanced security features, and cost controls so you can test agents safely—even with sensitive data—without surprise bills.
 
 ## Architecture
 
@@ -88,7 +88,7 @@ Sandbox Claws adds enforceable egress controls, air-gapped execution, automated 
 
 ```bash
 # 1. Deploy
-./deploy.sh
+./deploy-sandbox-claws.sh
 
 # 2. Add your Anthropic API key
 nano .env.openclaw
@@ -107,11 +107,11 @@ open http://localhost:8080
 
 ```bash
 # Deploy with specific security profile
-./deploy.sh filtered    # Allowlist-only egress
-./deploy.sh airgapped   # No internet access
+./deploy-sandbox-claws.sh filtered    # Allowlist-only egress
+./deploy-sandbox-claws.sh airgapped   # No internet access
 
 # Uninstall everything
-./uninstall.sh
+./uninstall-sandbox-claws.sh
 ```
 
 ## What's Included
@@ -129,8 +129,8 @@ open http://localhost:8080
 
 ```
 sandbox-claws/
-├── deploy.sh                 # One-command deployment
-├── uninstall.sh              # One-command uninstall
+├── deploy-sandbox-claws.sh   # One-command deployment
+├── uninstall-sandbox-claws.sh # One-command uninstall
 ├── docker-compose.yml        # Infrastructure definition
 ├── index.html                # Web dashboard
 ├── security/                 # Egress filter configs
