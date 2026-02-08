@@ -18,6 +18,11 @@ Complete documentation for the Sandbox Claws secure AI agent testing framework.
   - Real-time cost tracking dashboard
   - Automatic alerts at 80% budget threshold
   - Rate limiting to prevent runaway agents
+- **[Docker Hardening Guide](security/DOCKER_HARDENING.md)** 🔥 NEW - Container security best practices
+  - RAK Framework (Root, Agency, Keys risks)
+  - CPU and memory limits
+  - Read-only filesystem with secure tmpfs
+  - Network egress control strategies
 - **[Advanced Security Features](security/ADVANCED_SECURITY.md)** - Core security enhancements
   - Skill Marketplace Scanner
   - Remote Markdown Blocker
@@ -89,6 +94,7 @@ docs/
 │   └── NANOCLAW_INTEGRATION.md         ← NanoClaw testing guide 🔥 NEW
 ├── security/
 │   ├── COST_CONTROLS.md                ← Budget enforcement 🔥 NEW
+│   ├── DOCKER_HARDENING.md             ← Container security 🔥 NEW
 │   ├── ADVANCED_SECURITY.md            ← Advanced security features
 │   ├── SECURITY_DEPLOYMENT.md          ← Hardening guide
 │   └── DATA_EXFILTRATION.md            ← Threat model
@@ -116,6 +122,7 @@ docs/
 | **Test OpenClaw agents** 🔥 | [OPENCLAW_INTEGRATION.md](integrations/OPENCLAW_INTEGRATION.md) |
 | **Test NanoClaw skills** 🔥 | [NANOCLAW_INTEGRATION.md](integrations/NANOCLAW_INTEGRATION.md) |
 | **AI-native setup** 🔥 | [Claude Code Skills](../.claude/skills/README.md) |
+| **Docker hardening** 🔥 | [DOCKER_HARDENING.md](security/DOCKER_HARDENING.md) |
 | **Deploy on Docker** | [DOCKER.md](DOCKER.md) |
 | **Secure deployment** | [SECURITY_DEPLOYMENT.md](SECURITY_DEPLOYMENT.md) |
 | **Test agents** | [TESTING_GUIDE.md](TESTING_GUIDE.md) |

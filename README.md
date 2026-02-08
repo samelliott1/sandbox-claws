@@ -24,12 +24,14 @@
 - ✅ **Test Workflow** - Test → Validate → Deploy with confidence
 
 **Advanced Security Features** - [Read the security research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
+- ✅ **RAK Framework** - Root, Agency, Keys risk mitigation ([Composio](https://composio.dev/blog/secure-openclaw-moltbot-clawdbot-setup))
+- ✅ **Docker Hardening** - CPU/memory limits, read-only FS, secure tmpfs
 - ✅ **Skill Marketplace Scanner** - Detect malicious ClawHub skills
 - ✅ **Remote Markdown Blocker** - Prevent heartbeat.md RCE attacks  
 - ✅ **Credential Isolation** - Block access to ~/.ssh/, ~/.aws/
 - ✅ **Filesystem Monitor** - Real-time credential theft detection
 
-[📖 Security Features Documentation →](docs/security/ADVANCED_SECURITY.md) | [📖 Cost Controls Documentation →](docs/security/COST_CONTROLS.md)
+[📖 Security Features Documentation →](docs/security/ADVANCED_SECURITY.md) | [📖 Docker Hardening Guide →](docs/security/DOCKER_HARDENING.md) | [📖 Cost Controls Documentation →](docs/security/COST_CONTROLS.md)
 
 ## The Problem
 

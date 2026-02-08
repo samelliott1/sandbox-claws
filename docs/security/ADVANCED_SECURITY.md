@@ -7,16 +7,56 @@
 
 ---
 
-## 🎯 Overview
+## 🎯 Overview: The RAK Security Framework
+
+Sandbox Claws addresses the three critical threat vectors for AI agents, as defined in the **RAK Framework** ([Composio, 2026](https://composio.dev/blog/secure-openclaw-moltbot-clawdbot-setup)):
+
+### **Root Risk** - Host Compromise ✅ MITIGATED
+Protection against agent compromising your machine through RCE attacks.
+
+**Our Solutions:**
+- ✅ Container isolation (Docker with hardened runtime)
+- ✅ Non-root execution
+- ✅ Read-only filesystem
+- ✅ Dropped Linux capabilities
+- ✅ Network egress control (3 security profiles)
+
+### **Agency Risk** - Unintended Actions ⚠️ PARTIAL
+Protection against agent hallucinations causing destructive actions.
+
+**Current Solutions:**
+- ✅ Skill malware scanning (prevent malicious actions)
+- ✅ Cost limits (prevent runaway spending)
+- ✅ Rate limiting (prevent infinite loops)
+
+**Phase 2b (Planned):**
+- ⚠️ Agent Transparency Dashboard (decision traces)
+- ⚠️ Context monitoring (overflow prevention)
+- ⚠️ Circuit breakers (auto-stop failed actions)
+
+### **Keys Risk** - Credential Leakage ✅ MITIGATED
+Protection against API keys and OAuth tokens being leaked.
+
+**Our Solutions:**
+- ✅ Credential isolation (blocked filesystem access to `.ssh/`, `.aws/`)
+- ✅ Filesystem monitoring (detect credential theft attempts)
+- ✅ Environment variable protection
+- ✅ Read-only volume mounts where possible
+
+**Note:** For enhanced credential brokering (agent never sees tokens), consider third-party solutions like Composio.
+
+---
+
+## 🔧 Implemented Security Features
 
 These features address **critical security gaps** identified in the OpenClaw ecosystem crisis (Reddit r/cybersecurity, February 2026):
 
-| Vulnerability | Solution | Status |
-|---------------|----------|--------|
-| **Malicious ClawHub skills** | Skill Marketplace Scanner | ✅ Implemented |
-| **Remote code execution via heartbeat.md** | Remote Markdown Blocker | ✅ Implemented |
-| **Credential theft** | Credential Isolation | ✅ Implemented |
-| **Suspicious file access** | Filesystem Monitor | ✅ Implemented |
+| Vulnerability | RAK Category | Solution | Status |
+|---------------|--------------|----------|--------|
+| **Malicious ClawHub skills** | Agency + Root | Skill Marketplace Scanner | ✅ Implemented |
+| **Remote code execution via heartbeat.md** | Root | Remote Markdown Blocker | ✅ Implemented |
+| **Credential theft** | Keys | Credential Isolation | ✅ Implemented |
+| **Suspicious file access** | Keys | Filesystem Monitor | ✅ Implemented |
 
 ---
 
