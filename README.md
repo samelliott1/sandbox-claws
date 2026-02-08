@@ -11,6 +11,12 @@
 - ✅ **Token Counting** - Accurate cost estimation with tiktoken
 - ✅ **Automatic Alerts** - Warnings at 80% budget threshold
 
+🔌 **NEW: OpenClaw Integration** - [Test OpenClaw agents safely →](docs/integrations/OPENCLAW_INTEGRATION.md)
+- ✅ **Cost Estimation** - Predict production costs before deploying
+- ✅ **Skill Scanning** - Test ClawHub skills for malware
+- ✅ **Context Monitoring** - Prevent 200K token overflow
+- ✅ **Sub-Agent Testing** - Safe testing of parallel agents
+
 **Advanced Security Features** - [Read the security research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
 - ✅ **Skill Marketplace Scanner** - Detect malicious ClawHub skills
 - ✅ **Remote Markdown Blocker** - Prevent heartbeat.md RCE attacks  
@@ -156,6 +162,7 @@ Sandbox Claws focuses specifically on **egress control and data loss prevention*
 
 ## Documentation
 
+- **[OpenClaw Integration Guide](docs/integrations/OPENCLAW_INTEGRATION.md)** 🔥 NEW — Test OpenClaw agents safely
 - [Testing Guide](docs/TESTING_GUIDE.md) — Pre-built test cases and methodology
 - [Security Deployment](docs/SECURITY_DEPLOYMENT.md) — Profile configuration details
 - [Data Exfiltration Analysis](docs/DATA_EXFILTRATION.md) — Threat model deep-dive

@@ -45,6 +45,16 @@ Complete documentation for the Sandbox Claws secure AI agent testing framework.
 
 ---
 
+## 🔌 Integrations
+
+- **[OpenClaw Integration Guide](integrations/OPENCLAW_INTEGRATION.md)** 🔥 NEW - Test OpenClaw agents safely
+  - Cost estimation before production
+  - Skill malware scanning
+  - Context overflow monitoring
+  - Sub-agent testing workflows
+
+---
+
 ## 📊 Analysis & Research
 
 - **[AI Agent Security Research](analysis/AI_AGENT_SECURITY_RESEARCH.md)** - Industry security lessons
@@ -69,6 +79,8 @@ docs/
 │   ├── DOCKER.md                       ← Docker setup
 │   ├── PROXMOX.md                      ← Proxmox LXC
 │   └── GITHUB_INTEGRATION_GUIDE.md     ← CI/CD setup
+├── integrations/
+│   └── OPENCLAW_INTEGRATION.md         ← OpenClaw testing guide 🔥 NEW
 ├── security/
 │   ├── COST_CONTROLS.md                ← Budget enforcement 🔥 NEW
 │   ├── ADVANCED_SECURITY.md            ← Advanced security features
@@ -95,6 +107,7 @@ docs/
 | Task | Documentation |
 |------|---------------|
 | **Get started** | [QUICKSTART.md](../QUICKSTART.md) |
+| **Test OpenClaw agents** 🔥 | [OPENCLAW_INTEGRATION.md](integrations/OPENCLAW_INTEGRATION.md) |
 | **Deploy on Docker** | [DOCKER.md](DOCKER.md) |
 | **Secure deployment** | [SECURITY_DEPLOYMENT.md](SECURITY_DEPLOYMENT.md) |
 | **Test agents** | [TESTING_GUIDE.md](TESTING_GUIDE.md) |
