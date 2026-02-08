@@ -17,6 +17,12 @@
 - ✅ **Context Monitoring** - Prevent 200K token overflow
 - ✅ **Sub-Agent Testing** - Safe testing of parallel agents
 
+🔌 **NEW: NanoClaw Integration** - [Test NanoClaw skills safely →](docs/integrations/NANOCLAW_INTEGRATION.md)
+- ✅ **AI-Native Setup** - Claude Code handles configuration
+- ✅ **Skill Security** - Scan community skills before personal use
+- ✅ **Cost Estimates** - Calculate monthly costs for scheduled tasks
+- ✅ **Test Workflow** - Test → Validate → Deploy with confidence
+
 **Advanced Security Features** - [Read the security research →](docs/analysis/AI_AGENT_SECURITY_RESEARCH.md)
 - ✅ **Skill Marketplace Scanner** - Detect malicious ClawHub skills
 - ✅ **Remote Markdown Blocker** - Prevent heartbeat.md RCE attacks  
@@ -162,7 +168,9 @@ Sandbox Claws focuses specifically on **egress control and data loss prevention*
 
 ## Documentation
 
+- **[NanoClaw Integration Guide](docs/integrations/NANOCLAW_INTEGRATION.md)** 🔥 NEW — Test NanoClaw skills safely
 - **[OpenClaw Integration Guide](docs/integrations/OPENCLAW_INTEGRATION.md)** 🔥 NEW — Test OpenClaw agents safely
+- **[AI-Native Setup](docs/.claude/skills/README.md)** 🔥 NEW — Claude Code skills for automated setup
 - [Testing Guide](docs/TESTING_GUIDE.md) — Pre-built test cases and methodology
 - [Security Deployment](docs/SECURITY_DEPLOYMENT.md) — Profile configuration details
 - [Data Exfiltration Analysis](docs/DATA_EXFILTRATION.md) — Threat model deep-dive
